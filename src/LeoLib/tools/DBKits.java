@@ -90,8 +90,8 @@ public class DBKits {
 
         de.println("connectStr=" + connectStr);
         de.println("driverStr=" + driverStr);
-        //de.println("user=" + user);
-        //de.println("password=" + password);
+        de.println("user=" + account);
+        de.println("password=" + pwd);
 
         if( !isNull(driverStr) ) {db.setDriverString(driverStr);}
         if( !isNull(account) ) {db.setAccount(account);}
@@ -380,7 +380,9 @@ public class DBKits {
     	String sepor = " , `";
     	for(String key : hm.keySet()){
                 de.println(tag+key);
-    		re += sepor + key + "` = '" + hm.get(key) + "'";
+                if ( hm.get(key) != null ){
+                    re += sepor + key + "` = '" + hm.get(key) + "'";
+                }
         }
     	re = re.replaceFirst(sepor, "`");
     	return re;

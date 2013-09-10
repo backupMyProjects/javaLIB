@@ -25,8 +25,8 @@ public class Constants {
     public static final String appStr = "app.properties";
     public static final String dbStr = "db.properties";
     
-    public static final String prefixMySQL = "jdbc:mysql:";
-    public static final String prefixSQLite = "jdbc:sqlite:"; // 3306
+    public static final String prefixMySQL = "jdbc:mysql:"; // 3306
+    public static final String prefixSQLite = "jdbc:sqlite:"; 
     public static final String prefixOracle = "jdbc:oracle:"; // 1521
     public static final String prefixSQLServer = "jdbc:sqlserver:"; // 1433
     
