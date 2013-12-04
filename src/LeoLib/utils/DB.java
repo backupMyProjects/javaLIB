@@ -18,14 +18,15 @@ import static LeoLib.utils.Constants.*;
 public class DB {
     //debug de = new debug(false);
     
-    protected String driverStr;
-    protected String connectStr;
-    protected String account;
-    protected String password;
+    private String driverStr;
+    private String connectStr;
+    private String account;
+    private String password;
     
-    protected Connection con;
-    protected Statement smt;
-    protected ResultSet rs = null;
+    private Connection con;
+    //private PreparedStatement psmt = null;
+    private Statement smt;
+    private ResultSet rs = null;
     
     /** Creates a new instance of DB */
     public DB() {
