@@ -11,7 +11,7 @@ import static LeoLib.utils.Constants.*;
 import LeoLib.utils.Constants.DBServer;
 import static LeoLib.utils.Constants.DBServer.*;
 import LeoLib.utils.DB;
-import static LeoLib.utils.StringUtil.*;
+import static LeoLib.tools.Toolets.*;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;

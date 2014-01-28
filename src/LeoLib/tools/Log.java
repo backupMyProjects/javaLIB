@@ -107,7 +107,7 @@ public final class Log {
                     msg.toString();
                     break;
         }
-        StringUtil.println(output);
+        Toolets.println(output);
     }
 
 }
