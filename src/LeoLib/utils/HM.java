@@ -12,13 +12,13 @@ import java.util.*;
  * @author leo
  */
 public class HM extends java.util.HashMap implements java.io.Serializable{
-    private HashMap<String, ?> hm;
+    private HashMap<?, ?> hm; 
     
-    public HashMap<String, ?> getHM(){
+    public HashMap<?, ?> getHM(){
         return hm;
     }
     
-    public void setHM(HashMap<String, ?> hm){
+    public void setHM(HashMap hm){
         this.hm = hm;
     }
     
