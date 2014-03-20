@@ -36,11 +36,11 @@ public class CommonDAO {
     public List getInstanceListViaSQL(String selfSQL) {
         List re = null;
 
-        dbk.setDBConnection(envFilter);
         try{
+            dbk.setDBConnection(envFilter);
             dbk.exeSelectSQL(selfSQL);
         }catch(Exception e){
-            
+            e.printStackTrace();
         }
         
         de.println("CommonDAO:getInstanceListViaSQL "+dbk.getSQL());

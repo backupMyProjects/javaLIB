@@ -29,6 +29,9 @@ public class debug {
     public void setDebug(boolean debug){
         this.debug = debug;
     }
+    public boolean getDebug(){
+        return debug;
+    }
     
     public void println(String str)
     {

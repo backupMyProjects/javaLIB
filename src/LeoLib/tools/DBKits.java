@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -121,13 +123,16 @@ public class DBKits {
     }
 
     protected void exHandler(Exception ex){
+        Logger.getLogger(DBKits.class.getName()).log(Level.SEVERE, null, ex);
         if ( "java.sql.SQLException".equals(ex.getClass().getName()) ){
+            de.println("SQLException@ERROR : "+this.getClass().getName()+" :" + ex.getClass().getName()+" : "+ex.getMessage());
+        }else if ( "com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException e".equals(ex.getClass().getName()) ){
             de.println("SQLException@ERROR : "+this.getClass().getName()+" :" + ex.getClass().getName()+" : "+ex.getMessage());
         }else{
             de.println("Error Occurred! : "+ex.getStackTrace()[ex.getStackTrace().length-1].toString());
             de.println("?@ERROR : "+this.getClass().getName()+" :" + ex.getClass().getName()+" : "+ex.getMessage());
             
-            ex.printStackTrace();
+            //ex.printStackTrace();
         }
     }
 

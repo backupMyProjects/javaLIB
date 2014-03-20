@@ -67,7 +67,7 @@ public class DB {
         //}
     }
 
-    public void disconnect()throws Exception {
+    public void disconnect() throws Exception {
         //try {
             
             if (null != rs){

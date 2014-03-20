@@ -42,11 +42,16 @@ public class test {
      */
     public static void main(String[] args) throws Exception {
         //testDate();
-        System.out.println(customDateTime("2013-07-19 23:35:21", "yyyy-MM-dd hh:mm:ss"));
+        //System.out.println(customDateTime("2013-07-19 23:35:21", "yyyy-MM-dd hh:mm:ss"));
+        showNowINSecond();
     }
     
     public String getPath() {
         return this.getClass().getResource("/").getPath();
+    }
+    
+    public static void showNowINSecond(){
+        System.out.println(System.currentTimeMillis()/1000);
     }
     
     public static void testLog(){
