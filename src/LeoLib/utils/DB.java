@@ -47,6 +47,8 @@ public class DB {
     public void setPassword(String password) {
         this.password = password;
     }
+    
+    public Connection getConnection(){return con;}
 
     
     public void connect() throws Exception {
@@ -83,7 +85,9 @@ public class DB {
 
     public ResultSet exeSelectSQL(String sql)throws Exception {
         //try{
-            rs=smt.executeQuery(sql);
+        //System.out.println("con.getAutoCommit() ROOT 11 : " + con.getAutoCommit());
+        rs=smt.executeQuery(sql);
+        //System.out.println("con.getAutoCommit() ROOT 12 : " + con.getAutoCommit());
         //}catch( Exception sqlex ){
         //    de.println("SQL Statement : "+sql);
         //    de.println( "error in DB.exeSelectSQL() : "+sqlex.getMessage() );
@@ -101,6 +105,15 @@ public class DB {
         //    de.println( "error in DB.exeModifySQL() : "+sqlex.getMessage() );
         //}
         
+        return result;
+    }
+    
+    public int exeModifySQL(String sql, boolean autoCommit)throws Exception{
+        int result = 0;
+        //System.out.println("con.getAutoCommit() ROOT 21 : " + con.getAutoCommit());
+        con.setAutoCommit(autoCommit);
+        result=smt.executeUpdate(sql);
+        //System.out.println("con.getAutoCommit() ROOT 22 : " + con.getAutoCommit());
         return result;
     }
     

@@ -31,12 +31,12 @@ public class GeneralXmlPullParser {
 	static String result;
 
 	static int level = 0;
-	public static ArrayList<HashMap<String, String>> parse(String xmlPath) {
+	public static ArrayList<HashMap> parse(String xmlPath) {
 
 		//Log.i(tag, tag+".parse");
 
 		// 回傳物件
-		ArrayList<HashMap<String, String>> resultList = new ArrayList<HashMap<String, String>>();
+		ArrayList<HashMap> resultList = new ArrayList<HashMap>();
 
 		try {
 

@@ -12,7 +12,9 @@ import LeoLib.utils.Constants.DBServer;
 import static LeoLib.utils.Constants.DBServer.*;
 import LeoLib.utils.DB;
 import static LeoLib.tools.Toolets.*;
+import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +38,7 @@ public class DBKits {
     protected int modify_result;
     protected String sql;
     protected DBServer dbNow;
+    //private Connection conn;
     
     public DBKits(Properties dbProp){
         this.dbProp = dbProp;
@@ -50,6 +53,23 @@ public class DBKits {
     }
     public DBServer getDBServer(){
         return dbNow;
+    }
+    public void setCommit(){
+        try {
+            de.println("conn.getAutoCommit() : "+db.getConnection().getAutoCommit());
+            if ( db.getConnection().getAutoCommit() ){
+                de.println("Can not manually call commit!!");
+                return;
+            }
+            db.getConnection().commit();
+        } catch (SQLException ex) {
+            Logger.getLogger(DBKits.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                db.getConnection().rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(DBKits.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
     }
 
     public boolean connectFlag = false;
@@ -101,6 +121,7 @@ public class DBKits {
 
         try {
             db.connect();
+            //conn = db.getConnection();
             connectFlag = true;
         }catch(Exception ex){
             exHandler(ex);
@@ -108,6 +129,8 @@ public class DBKits {
         return connectFlag;
 
     }
+    
+    
 
     public boolean setDBDisconnect(){
         try{
@@ -119,7 +142,20 @@ public class DBKits {
 
         de.println("setDBDisconnect:connectFlag: " + connectFlag);
         return !connectFlag;
+    }
+    public boolean setDBDisconnect(boolean commitIt){
+        try{
+            if ( commitIt ){
+                this.setCommit();
+            }
+            db.disconnect();
+            connectFlag = false;
+        } catch(Exception ex){
+            exHandler(ex);
+        }
 
+        de.println("setDBDisconnect:connectFlag: " + connectFlag);
+        return !connectFlag;
     }
 
     protected void exHandler(Exception ex){
@@ -196,11 +232,29 @@ public class DBKits {
         
         return modifyFlag;
     }
+    public boolean exeModifySQL(String selfSQL, boolean autoCommit)
+    {
+        sql = selfSQL;
+        modifyFlag = false;
+        try{
+            modify_result = db.exeModifySQL(selfSQL, autoCommit);
+            modifyFlag = true;
+        }catch(Exception ex){
+            exHandler(ex);
+        }
+        
+        return modifyFlag;
+    }
 
     public boolean exeInsert(String targetTable, Map<String, Object> keyMap, Map<String, Object> whereCondition)
     {
         sql = getInsertSQL(targetTable, keyMap, whereCondition);
         return exeModifySQL(sql);
+    }
+    public boolean exeInsert(String targetTable, Map<String, Object> keyMap, Map<String, Object> whereCondition, boolean autoCommit)
+    {
+        sql = getInsertSQL(targetTable, keyMap, whereCondition);
+        return exeModifySQL(sql, autoCommit);
     }
 
     public boolean exeUpdate(String targetTable, Map<String, Object> keyMap, Map<String, Object> whereCondition)

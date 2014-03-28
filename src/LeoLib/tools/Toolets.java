@@ -38,7 +38,7 @@ public class Toolets {
         // Check Value
         Iterator<HashMap> ita = inputALHM.iterator();
         while (ita.hasNext()) {
-            HM itemHM = (HM) ita.next();
+            HashMap itemHM = (HashMap) ita.next();
             printHM(itemHM);
         }
     }

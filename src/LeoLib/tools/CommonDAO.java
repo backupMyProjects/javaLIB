@@ -19,11 +19,15 @@ import static LeoLib.utils.Constants.DBServer.*;
 public class CommonDAO {
     debug de = new debug(true);
     
-    APProperty appProperty = new APProperty(true);
-    Properties appProp = appProperty.getAppProp();
-    Properties dbProp = appProperty.getDBProp();
-    DBKits dbk;
-    String envFilter = appProperty.getPropertyValue("env.filter");
+    protected APProperty appProperty = new APProperty(true);
+    protected Properties appProp = appProperty.getAppProp();
+    protected Properties dbProp = appProperty.getDBProp();
+    protected DBKits dbk;
+    protected String envFilter = appProperty.getPropertyValue("env.filter");
+    
+    public DBKits getDBKits(){
+        return this.dbk;
+    }
     
     public CommonDAO(DBServer dbNow){
         dbk = new DBKits(dbProp, dbNow);
@@ -96,6 +100,41 @@ public class CommonDAO {
         de.println("CommonDAO:setInstance "+dbk.getSQL());
         re = dbk.getModifyResult();
         dbk.setDBDisconnect();
+
+        return re;
+    }
+    
+    public List setInsertNReturnTransactioned(String table, HashMap keyMap, HashMap whereHM) {
+        List re = null;
+
+        dbk.setDBConnection(envFilter);
+        dbk.exeInsert(table, keyMap, null, false);
+        de.println("CommonDAO:setInstance "+dbk.getSQL());
+        int setRes = dbk.getModifyResult();
+        if ( setRes > 0 ){
+            switch(dbk.dbNow){
+                case MySQL : 
+                    dbk.exeSelectSQL("SELECT LAST_INSERT_ID() as last_id"); // MySQL
+                    break;
+                case SQLite : 
+                    //dbk.exeSelectSQL("SELECT LAST_INSERT_ID()"); // SQLite
+                    System.out.println("Not Supported, now");
+                    break;
+                case Oracle : 
+                    //dbk.exeSelectSQL("SELECT LAST_INSERT_ID()"); // Oracle
+                    System.out.println("Not Supported, now");
+                    break;
+                case SQLServer : 
+                    dbk.exeSelectSQL("SELECT SCOPE_IDENTITY()"); // SQLServer
+                    break;
+                default : 
+                    System.out.println("Not Supported");
+            }
+            
+        }
+        //dbk.setCommit();
+        re = dbk.getList();
+        dbk.setDBDisconnect(true);
 
         return re;
     }
