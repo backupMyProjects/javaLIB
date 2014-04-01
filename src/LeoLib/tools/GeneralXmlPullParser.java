@@ -4,18 +4,12 @@
  */
 package LeoLib.tools;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PushbackInputStream;
-import java.io.StringReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.xml.sax.InputSource;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -31,12 +25,12 @@ public class GeneralXmlPullParser {
 	static String result;
 
 	static int level = 0;
-	public static ArrayList<HashMap> parse(String xmlPath) {
+	public static ArrayList<HashMap<String, String>> parse(String xmlPath) {
 
 		//Log.i(tag, tag+".parse");
 
 		// 回傳物件
-		ArrayList<HashMap> resultList = new ArrayList<HashMap>();
+		ArrayList<HashMap<String, String>> resultList = new ArrayList<HashMap<String, String>>();
 
 		try {
 

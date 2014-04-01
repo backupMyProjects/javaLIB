@@ -28,7 +28,7 @@ public class HttpDataDepressor {
         HashMap<String, String> result = new HashMap();
         Enumeration<String> enu = request.getAttributeNames();
         while (enu.hasMoreElements()) {
-            String ele = enu.nextElement();
+            String ele = enu.nextElement(); 
             //System.out.println(ele + " : " + request.getAttribute(ele));
             result.put(ele, (String) request.getAttribute(ele));
         }

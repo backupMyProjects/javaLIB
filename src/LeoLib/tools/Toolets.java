@@ -6,6 +6,7 @@ package LeoLib.tools;
 
 import LeoLib.utils.HM;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,26 +15,24 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 
 /**
  *
- * @author leo
- * merge @ 2012/3/5
+ * @author leo merge @ 2012/3/5
  */
 public class Toolets {
 
     /* Data Print */
-    
     public static String println(Object input) {
         System.out.println(input.toString());
         return input.toString();
     }
-    
+
     public static void printALHM(ArrayList<HashMap> inputALHM) {
         // Check Value
         Iterator<HashMap> ita = inputALHM.iterator();
@@ -64,13 +63,12 @@ public class Toolets {
             }
         }
     }
-    
+
     /* Data Check */
-    
     public static boolean notEmpList(List input) {
         return (input != null && input.size() > 0) ? true : false;
     }
-    
+
     public static boolean isNumber(String input) {
         boolean isNumber = false;
 
@@ -83,7 +81,7 @@ public class Toolets {
 
         return isNumber;
     }
-    
+
     public static boolean isEmpStr(String input) {
         return (checkTwoStr("", input)) ? true : false;
     }
@@ -95,9 +93,8 @@ public class Toolets {
     public static boolean checkTwoStr(String a, String b) {
         return (a.equals(b)) ? true : false;
     }
-    
-    /* String Tool */
 
+    /* String Tool */
     // allow : date , Long(time million second)
     public static String getDateTime(String pattern, Object... dates) {
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
@@ -112,6 +109,7 @@ public class Toolets {
                 Date date = cal.getTime();
                 return sdf.format(date);
             } else {/* nothing */
+
             }
         }
         return sdf.format(new Date());
@@ -122,7 +120,7 @@ public class Toolets {
         String regex = "<(?![!/]?[ABIU][>\\s])[^>]*>|&nbsp;";
         return srcStr.replaceAll(regex, "");
     }
-    
+
     public static String md5(String input) {
         String result = "";
         try {
@@ -152,29 +150,29 @@ public class Toolets {
     }
 
     public static String getRandomString(int Len) {
-         
-        String[] baseString={"0","1","2","3",
-                "4","5","6","7","8","9",
-                "a","b","c","d","e",
-                "f","g","h","i","j",
-                "k","l","m","n","o",
-                "p","q","r","s","t",
-                "u","v","w","x","y",
-                "z","A","B","C","D",
-                "E","F","G","H","I",
-                "J","K","L","M","N",
-                "O","P","Q","R","S",
-                "T","U","V","W","X","Y","Z"};
+
+        String[] baseString = {"0", "1", "2", "3",
+            "4", "5", "6", "7", "8", "9",
+            "a", "b", "c", "d", "e",
+            "f", "g", "h", "i", "j",
+            "k", "l", "m", "n", "o",
+            "p", "q", "r", "s", "t",
+            "u", "v", "w", "x", "y",
+            "z", "A", "B", "C", "D",
+            "E", "F", "G", "H", "I",
+            "J", "K", "L", "M", "N",
+            "O", "P", "Q", "R", "S",
+            "T", "U", "V", "W", "X", "Y", "Z"};
         Random random = new Random();
-        int length=baseString.length;
-        String randomString="";
-        for(int i=0;i<length;i++){
-            randomString+=baseString[random.nextInt(length)];
+        int length = baseString.length;
+        String randomString = "";
+        for (int i = 0; i < length; i++) {
+            randomString += baseString[random.nextInt(length)];
         }
         random = new Random(System.currentTimeMillis());
-        String resultStr="";
+        String resultStr = "";
         for (int i = 0; i < Len; i++) {
-            resultStr += randomString.charAt(random.nextInt(randomString.length()-1));
+            resultStr += randomString.charAt(random.nextInt(randomString.length() - 1));
         }
         return resultStr;
     }
@@ -201,7 +199,6 @@ public class Toolets {
     }
 
     /* Data Sort */
-    
     public static Integer[] sortInt(String... inputs) {
         Integer[] intArr = null;
         if (inputs.length > 0) {
@@ -236,7 +233,6 @@ public class Toolets {
     }
 
     /* File Tool */
-    
     public static String readFile2String(String filePath) {
         try {
             StringBuffer fileData = new StringBuffer(1000);
@@ -302,16 +298,27 @@ public class Toolets {
         re = request.getParameter(target) != null ? request.getParameter(target) : "";
         return re;
     }
-    
-    public static void showParm(HttpServletRequest request){
+
+    public static void showParm(HttpServletRequest request) {
         Enumeration enu = request.getParameterNames();
 
-        while( enu.hasMoreElements() ){
+        while (enu.hasMoreElements()) {
             String parmKey = enu.nextElement().toString();
-            System.out.println("parm key "+ parmKey );
-            System.out.println("parm value "+request.getParameter(parmKey));
+            System.out.println("parm key " + parmKey);
+            System.out.println("parm value " + request.getParameter(parmKey));
         }
 
     }
-    
+
+    public static boolean createParentFolder(String filePath) {
+
+        File parent = new File(filePath).getParentFile();
+        if (!parent.exists() && !parent.mkdirs()) {
+            throw new IllegalStateException("Couldn't create dir: " + parent);
+        }
+        //System.out.println("Create Folder." + parent.getAbsolutePath());
+
+        return false;
+    }
+
 }
