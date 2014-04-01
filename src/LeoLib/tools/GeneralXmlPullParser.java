@@ -110,6 +110,7 @@ public class GeneralXmlPullParser {
 		          		//Log.i( tag, "</"+parser.getName()+">" );
 		          		if ( level == 1 ){
 		          			resultList.add( (HashMap<String, String>)resultHashMap.clone() );
+                                                resultHashMap.clear();
 		          		}
 		          		break;
 		          	case XmlPullParser.END_DOCUMENT:
