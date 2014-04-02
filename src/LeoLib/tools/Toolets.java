@@ -7,11 +7,15 @@ package LeoLib.tools;
 import LeoLib.utils.HM;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -254,18 +258,16 @@ public class Toolets {
         return null;
     }
 
-    public static boolean download2File(String fileUrl, String fileLocal) {
+    
+    public static boolean downloadFile(String fileUrl, String fileLocal) {
         try {
             println("Connecting to site...\n");
-
             URL url = new URL(fileUrl);
             url.openConnection();
             InputStream reader = url.openStream();
 
-            /*
-             * Setup a buffered file writer to write
-             * out what we read from the website.
-             */
+            
+            LeoLib.tools.Toolets.createParentFolder(fileLocal);
             FileOutputStream writer = new FileOutputStream(fileLocal);
             byte[] buffer = new byte[153600];
             int totalBytesRead = 0;
@@ -292,6 +294,54 @@ public class Toolets {
         }
         return false;
     }
+    
+    
+    public static boolean downloadFile2(String inFileURL, String outFilePath) {
+		try {
+
+			//boolean eof = false;
+
+			HttpURLConnection connect = (HttpURLConnection) (new URL(inFileURL))
+					.openConnection();
+			connect.setRequestMethod("GET");
+			connect.setDoOutput(true);
+			connect.connect();
+
+			// String PATH_op = Environment.getExternalStorageDirectory() +
+			// "/download/" + targetFileName;
+			
+			LeoLib.tools.Toolets.createParentFolder(outFilePath);
+			FileOutputStream file = new FileOutputStream(new File(outFilePath));
+
+			InputStream is = connect.getInputStream();
+			byte[] buffer = new byte[1024];
+			int len1 = 0;
+			while ((len1 = is.read(buffer)) > 0) {
+				file.write(buffer, 0, len1);
+			}
+
+			file.close();
+			return true;
+
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e);
+			//e.printStackTrace();
+		} catch (ProtocolException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e);
+			//e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e);
+			//e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e);
+			//e.printStackTrace();
+		}
+		return false;
+	}
 
     public static String parmGetter(HttpServletRequest request, String target) {
         String re;
