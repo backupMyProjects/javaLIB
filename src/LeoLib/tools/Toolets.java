@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author leo merge @ 2012/3/5
  */
 public class Toolets {
+    protected static String TAG = Toolets.class.getName();
 
     /* Data Print */
     public static String println(Object input) {
@@ -290,7 +291,9 @@ public class Toolets {
             reader.close();
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.err.println(TAG);
+            System.err.println(e);
         }
         return false;
     }
