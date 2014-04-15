@@ -5,6 +5,7 @@
 package LeoLib.tools;
 
 import LeoLib.utils.HM;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,6 +24,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -75,19 +77,25 @@ public class Toolets {
     }
 
     public static boolean isNumber(String input) {
-        boolean isNumber = false;
-
+    	if( isNull(input) ){return false;}
         try {
             Integer check = Integer.parseInt(input);
-            isNumber = true;
+            return true;
         } catch (NumberFormatException nfe) {
-            isNumber = false;
+            return false;
         }
-
-        return isNumber;
     }
-
+    
+    @Deprecated
     public static boolean isEmpStr(String input) {
+        return (checkTwoStr("", input)) ? true : false;
+    }
+    /** 
+     * Sun set isEmpStr
+     * this function return true, if input is null / ""
+     * */
+    public static boolean isEmpty(String input) {
+    	if( isNull(input) ){return true;}
         return (checkTwoStr("", input)) ? true : false;
     }
 
@@ -96,7 +104,13 @@ public class Toolets {
     }
 
     public static boolean checkTwoStr(String a, String b) {
-        return (a.equals(b)) ? true : false;
+    	if ( !isNull(a) && !isNull(b) ){
+            return (a.equals(b)) ? true : false;
+    	}else if ( isNull(a) && isNull(b) ){
+    		return true;
+    	}else{
+    		return false;
+    	}
     }
 
     /* String Tool */
@@ -154,9 +168,10 @@ public class Toolets {
         return hexString.toString();
     }
 
-    public static String getRandomString(int Len) {
+    public static String getRandomString(int stringLength) {
 
-        String[] baseString = {"0", "1", "2", "3",
+        String[] baseString = {
+        	"0", "1", "2", "3",
             "4", "5", "6", "7", "8", "9",
             "a", "b", "c", "d", "e",
             "f", "g", "h", "i", "j",
@@ -167,7 +182,8 @@ public class Toolets {
             "E", "F", "G", "H", "I",
             "J", "K", "L", "M", "N",
             "O", "P", "Q", "R", "S",
-            "T", "U", "V", "W", "X", "Y", "Z"};
+            "T", "U", "V", "W", "X", "Y", "Z"
+        };
         Random random = new Random();
         int length = baseString.length;
         String randomString = "";
@@ -176,7 +192,7 @@ public class Toolets {
         }
         random = new Random(System.currentTimeMillis());
         String resultStr = "";
-        for (int i = 0; i < Len; i++) {
+        for (int i = 0; i < stringLength; i++) {
             resultStr += randomString.charAt(random.nextInt(randomString.length() - 1));
         }
         return resultStr;
@@ -209,7 +225,13 @@ public class Toolets {
         if (inputs.length > 0) {
             intArr = new Integer[inputs.length];
             for (int i = 0; i < inputs.length; i++) {
-                intArr[i] = Integer.parseInt(inputs[i]);
+            	if ( isNumber(inputs[i]) ){
+                    intArr[i] = Integer.parseInt(inputs[i]);
+            	}else{
+            		//intArr[i] = -65535;
+            		println("FORMAT ERROR : " + inputs[i]);
+            		return null;
+            	}
             }
 
             Arrays.sort(intArr);
@@ -357,8 +379,8 @@ public class Toolets {
 
         while (enu.hasMoreElements()) {
             String parmKey = enu.nextElement().toString();
-            System.out.println("parm key " + parmKey);
-            System.out.println("parm value " + request.getParameter(parmKey));
+            println("parm key " + parmKey);
+            println("parm value " + request.getParameter(parmKey));
         }
 
     }
