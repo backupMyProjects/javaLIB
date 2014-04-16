@@ -24,6 +24,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import static java.lang.System.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -33,12 +34,6 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class Toolets {
     protected static String TAG = Toolets.class.getName();
-
-    /* Data Print */
-    public static String println(Object input) {
-        System.out.println(input.toString());
-        return input.toString();
-    }
 
     public static void printALHM(ArrayList<HashMap> inputALHM) {
         // Check Value
@@ -54,19 +49,19 @@ public class Toolets {
          Iterator<String> KeyIt = inputHM.keySet().iterator();
          while (KeyIt.hasNext()) {
          String key = KeyIt.next().toString();
-         System.out.println(key + "=" + inputHM.get(key));
+         out.println(key + "=" + inputHM.get(key));
          }
          */
 
         Iterator<String> keyIt = inputHM.keySet().iterator();
         while (keyIt.hasNext()) {
             String key = keyIt.next();
-            //System.out.println(obj.getClass().getName());
+            //out.println(obj.getClass().getName());
             if ("java.util.ArrayList".equals(inputHM.get(key).getClass().getName())) {
-                println(key + " ::: ");
+            	out.println(key + " ::: ");
                 printALHM((ArrayList) inputHM.get(key));
             } else {
-                println(key + " : " + inputHM.get(key));
+                out.println(key + " : " + inputHM.get(key));
             }
         }
     }
@@ -124,7 +119,7 @@ public class Toolets {
             } else if ("java.lang.Long".equals(dates[0].getClass().getName())) {
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis((Long) dates[0]);
-                //System.out.println("getTimeInMillis : "+cal.getTimeInMillis());
+                //out.println("getTimeInMillis : "+cal.getTimeInMillis());
                 Date date = cal.getTime();
                 return sdf.format(date);
             } else {/* nothing */
@@ -147,7 +142,7 @@ public class Toolets {
             md.update(input.getBytes());
             byte[] digest = md.digest();
             result = toHexString(digest);
-            //System.out.println(result);
+            //out.println(result);
             return result;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -204,7 +199,7 @@ public class Toolets {
         } catch (UnsupportedEncodingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            return "encoding failed";
+            return "ENCODE FAILED";
         }
 
     }
@@ -214,7 +209,7 @@ public class Toolets {
             return URLDecoder.decode(input, decode);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-            return "encoding failed";
+            return "DECODE FAILED";
         }
 
     }
@@ -229,7 +224,7 @@ public class Toolets {
                     intArr[i] = Integer.parseInt(inputs[i]);
             	}else{
             		//intArr[i] = -65535;
-            		println("FORMAT ERROR : " + inputs[i]);
+            		out.println("FORMAT ERROR : " + inputs[i]);
             		return null;
             	}
             }
@@ -252,7 +247,7 @@ public class Toolets {
 
         Integer[] intArr = sortInt(inputs);
         for (int i = 0; i < intArr.length; i++) {
-            //System.out.println("intArr : "+intArr[i]);
+            //out.println("intArr : "+intArr[i]);
             result += (i != intArr.length - 1) ? intArr[i] + spliter : intArr[i];
         }
 
@@ -284,7 +279,7 @@ public class Toolets {
     
     public static boolean downloadFile(String fileUrl, String fileLocal) {
         try {
-            println("Connecting to site...\n");
+            out.println("Connecting");
             URL url = new URL(fileUrl);
             url.openConnection();
             InputStream reader = url.openStream();
@@ -296,7 +291,7 @@ public class Toolets {
             int totalBytesRead = 0;
             int bytesRead = 0;
 
-            println("Reading file 150KB blocks at a time.\n");
+            //out.println("Reading file "+buffer.length/1024+"KB blocks at a time.");
 
             long startTime = System.currentTimeMillis();
 
@@ -308,16 +303,16 @@ public class Toolets {
 
             long endTime = System.currentTimeMillis();
 
-            println("Done. " + (new Integer(totalBytesRead).toString()) + " bytes read (" + (new Long(endTime - startTime).toString()) + " millseconds).\n");
+            out.println("Done. " + (new Integer(totalBytesRead).toString()) + " bytes read (" + (new Long(endTime - startTime).toString()) + " millseconds).");
             writer.close();
             reader.close();
             return true;
         } catch (Exception e) {
             //e.printStackTrace();
-            System.err.println(TAG);
-            System.err.println(e);
+        	err.println(TAG);
+            err.println(e);
+    		return false;
         }
-        return false;
     }
     
     
@@ -349,29 +344,26 @@ public class Toolets {
 			return true;
 
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e);
+			err.println(e);
 			//e.printStackTrace();
+			return false;
 		} catch (ProtocolException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e);
+			err.println(e);
 			//e.printStackTrace();
+			return false;
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e);
+			err.println(e);
 			//e.printStackTrace();
+			return false;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e);
+			err.println(e);
 			//e.printStackTrace();
+			return false;
 		}
-		return false;
 	}
 
     public static String parmGetter(HttpServletRequest request, String target) {
-        String re;
-        re = request.getParameter(target) != null ? request.getParameter(target) : "";
-        return re;
+        return request.getParameter(target) != null ? request.getParameter(target) : "";
     }
 
     public static void showParm(HttpServletRequest request) {
@@ -379,8 +371,8 @@ public class Toolets {
 
         while (enu.hasMoreElements()) {
             String parmKey = enu.nextElement().toString();
-            println("parm key " + parmKey);
-            println("parm value " + request.getParameter(parmKey));
+            out.println("parm key " + parmKey);
+            out.println("parm value " + request.getParameter(parmKey));
         }
 
     }
@@ -391,9 +383,14 @@ public class Toolets {
         if (!parent.exists() && !parent.mkdirs()) {
             throw new IllegalStateException("Couldn't create dir: " + parent);
         }
-        //System.out.println("Create Folder." + parent.getAbsolutePath());
+        //out.println("Create Folder." + parent.getAbsolutePath());
 
         return false;
+    }
+    
+    public static boolean hasFile(String filePath){
+    	File file = new File(filePath);
+    	if (file.exists()){return true;}else{return false;}
     }
 
 }

@@ -1,6 +1,9 @@
 package LeoLib.tools;
 
+import static java.lang.System.*;
+
 import java.util.Date;
+
 import LeoLib.utils.*;
 
 /**
@@ -107,7 +110,7 @@ public final class Log {
                     msg.toString();
                     break;
         }
-        Toolets.println(output);
+        out.println(output);
     }
 
 }
