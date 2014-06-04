@@ -32,6 +32,10 @@ public class CommonDAO {
     public CommonDAO(DBServer dbNow){
         dbk = new DBKits(dbProp, dbNow);
     }
+    public CommonDAO(DBServer dbNow, boolean debug){
+        dbk = new DBKits(dbProp, dbNow);
+        de.setDebug(debug);
+    }
     
     public void setDBServer(DBServer dbNow){
         dbk.setDBServer(dbNow);

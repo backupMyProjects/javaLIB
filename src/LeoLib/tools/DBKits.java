@@ -28,7 +28,7 @@ import java.util.logging.Logger;
  * @author Leo Chen
  */
 public class DBKits {
-    protected debug de = new debug(true);
+    protected debug de = new debug(false);
     
     protected Properties dbProp;
 //    protected boolean checked = false;
@@ -46,6 +46,15 @@ public class DBKits {
     public DBKits(Properties dbProp, DBServer dbNow){
         this.dbProp = dbProp;
         this.dbNow = dbNow;
+    }
+    public DBKits(Properties dbProp, boolean debug){
+        this.dbProp = dbProp;
+        this.de.setDebug(debug);
+    }
+    public DBKits(Properties dbProp, DBServer dbNow, boolean debug){
+        this.dbProp = dbProp;
+        this.dbNow = dbNow;
+        this.de.setDebug(debug);
     }
     
     public void setDBServer(DBServer input){

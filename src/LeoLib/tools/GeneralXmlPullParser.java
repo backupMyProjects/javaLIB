@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import java.util.List;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -17,6 +17,9 @@ import org.xmlpull.v1.XmlPullParserFactory;
 /**
  * 
  * @author leo
+ * Parsing XML to ArrayList<HashMap<String, String>> by parse("XML String")
+ * Reverting ArrayList<HashMap<String, String>> to XML String by revert(ArrayList<hashMap<String,String>>)
+ * 
  */
 
 public class GeneralXmlPullParser {
@@ -127,5 +130,29 @@ public class GeneralXmlPullParser {
 
 		// return resultList;
 	}
+        
+        public static String reverse(List<HashMap<String, String>> resultList){
+            String result = null;
+            if ( null != resultList ) {
+                result = "<data>";
+                for(int i = 0 ; i< resultList.size() ; i++){
+                    result += "<item>";
+                    HashMap<String, Object> resultHM = (HashMap)resultList.get(i);
+                    int size = resultHM.keySet().size();
+                    for (String key : resultHM.keySet()) {
+                        result += "<"+key+">";
+                        result += "<![CDATA[";
+                        result += resultHM.get(key) ;
+                        result +="]]>";
+                        result +="</"+key+">";
+                    }
+                    result += "</item>";
+                }
+                result += "</data>";
+            }else{
+                result = "<data />";
+            }
+            return result;
+        }
 
 }
