@@ -96,7 +96,7 @@ public class DBPrepared {
         return contentList;
     }
     
-    public List getDataListConn(String sql, List<String> where) throws Exception{
+    public List getDataListCon(String sql, List<String> where) throws Exception{
         this.connect();
         List result = getDataList(sql, where);
         this.disconnect();
