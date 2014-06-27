@@ -34,6 +34,18 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class Toolets {
     protected static String TAG = Toolets.class.getName();
+    
+    public static void printArrayListHashMap(ArrayList<HashMap<String, String>> inputALHM) {
+        Iterator<HashMap<String, String>> ita = inputALHM.iterator();
+        while (ita.hasNext()) {
+            HashMap itemHM = (HashMap) ita.next();
+            Iterator<String> keyIt = itemHM.keySet().iterator();
+            while (keyIt.hasNext()) {
+                String key = keyIt.next();
+                out.println(key + " : " + itemHM.get(key));
+            }
+        }
+    }
 
     public static void printALHM(ArrayList<HashMap> inputALHM) {
         // Check Value
