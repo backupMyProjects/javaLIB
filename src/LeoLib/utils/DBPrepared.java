@@ -107,7 +107,7 @@ public class DBPrepared {
     
     protected ResultSet getData(String sql, List<String> where) throws Exception {
         pstmt = con.prepareStatement(sql);
-        for (int i = 0; i < where.size(); i++) {
+        for (int i = 0; null!=where && i < where.size(); i++) {
             pstmt.setString(i+1, where.get(i));
         }
         rs = pstmt.executeQuery();
