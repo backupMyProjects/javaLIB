@@ -71,6 +71,14 @@ public class DBPrepared {
     List<String> metaList;
     public List<String> getMetaDataList(){return metaList;}
     List contentList;
+    
+    public List getDataListCon(String sql, List<String> where) throws Exception{
+        this.connect();
+        List result = getDataList(sql, where);
+        this.disconnect();
+        return result;
+    }
+    
     public List getDataList(String sql, List<String> where) throws Exception{
         rs = getData(sql, where);
         metaList = new ArrayList();
@@ -95,16 +103,7 @@ public class DBPrepared {
         }
         return contentList;
     }
-    
-    public List getDataListCon(String sql, List<String> where) throws Exception{
-        this.connect();
-        List result = getDataList(sql, where);
-        this.disconnect();
-        return result;
-    }
 
-    /** END Temp functions */
-    
     protected ResultSet getData(String sql, List<String> where) throws Exception {
         pstmt = con.prepareStatement(sql);
         for (int i = 0; null!=where && i < where.size(); i++) {
@@ -114,20 +113,34 @@ public class DBPrepared {
         return rs;
     }
 
-    /** Not Yet */
-    /*
-    protected int setData(String sql) throws Exception {
-        int result = 0;
-        result = pstmt.executeUpdate(sql);
-        return result;
+    public List setDataCon(String sql, List<String> where) throws Exception{
+        
+        this.connect();
+        List contentList = setData(sql, where);
+        this.disconnect();
+        
+        return contentList;
+    }
+    
+    protected List setData(String sql, List<String> where) throws Exception {
+        
+        int result = setData(sql, where, true);
+        HashMap hm = new HashMap();
+        hm.put("result", result);
+        List contentList = new ArrayList();
+        contentList.add(hm);
+        
+        return contentList;
     }
 
-    protected int setData(String sql, boolean autoCommit) throws Exception {
+    protected int setData(String sql, List<String> where, boolean autoCommit) throws Exception {
         int result = 0;
         con.setAutoCommit(autoCommit);
-        result = pstmt.executeUpdate(sql);
+        pstmt = con.prepareStatement(sql);
+        for (int i = 0; null!=where && i < where.size(); i++) {
+            pstmt.setString(i+1, where.get(i));
+        }
+        result = pstmt.executeUpdate();
         return result;
     }
-    */
-
 }
