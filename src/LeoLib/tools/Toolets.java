@@ -7,13 +7,17 @@ package LeoLib.tools;
 import LeoLib.utils.HM;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import static java.lang.System.*;
+
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -24,9 +28,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import static java.lang.System.*;
-
 import javax.servlet.http.HttpServletRequest;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 
 /**
  *
@@ -287,6 +291,19 @@ public class Toolets {
 
         return null;
     }
+    
+    public static boolean writeString2File(String input, String filePath) {
+        try {
+            BufferedWriter out = new BufferedWriter(new FileWriter(filePath));
+            out.write(input);
+            out.close();
+            return true;
+        } catch (IOException e) {
+            System.out.println("Exception ");
+            out.close();
+            return false;
+        }
+    }
 
     
     public static boolean downloadFile(String fileUrl, String fileLocal) {
@@ -403,6 +420,110 @@ public class Toolets {
     public static boolean hasFile(String filePath){
     	File file = new File(filePath);
     	if (file.exists()){return true;}else{return false;}
+    }
+    
+    public static File createFile(String filePath) {
+        File file = null;
+        try {
+            // write JSON to a file
+            file = new File(filePath);
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                try {
+                    file.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return file;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public static Map Json2Map(String json) {
+        
+        if (null == json) {return null;}
+        
+        Map<String, String> map = new HashMap<String, String>();
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+
+            //convert JSON string to Map
+            map = mapper.readValue(json,
+                    new TypeReference<HashMap<String, String>>() {
+            });
+
+            //out.println("Json2Map:"+map);
+            
+            return map;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+    public static String Map2Json(Map<String, Object> map){
+        if (null == map) {return null;}
+        
+        try {
+ 
+		ObjectMapper mapper = new ObjectMapper();
+		String json = "";
+ 
+		//convert map to JSON string
+		json = mapper.writeValueAsString(map);
+ 
+		//out.println("Map2Json:"+json);
+                
+                return json;
+ 
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+        return null;
+    }
+    
+    public static boolean Map2JsonFile(Map<String, Object> map, String filePath) {
+        if (null == map || null == filePath) {return false;}
+        
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            // write JSON to a file
+            File file = Toolets.createFile(filePath);
+            mapper.writeValue(file, map);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public static Map JsonFile2Map(String jsonFile){
+        if (null == jsonFile) {return null;}
+        Map<String, Object> map = null;
+        try {
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            // read JSON from a file
+            map = mapper.readValue(
+                    new File(jsonFile),
+                    new TypeReference<Map<String, Object>>() {});
+
+            //out.println("JsonFile2Map:"+map);
+            
+            return map;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
