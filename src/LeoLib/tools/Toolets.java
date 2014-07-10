@@ -294,12 +294,18 @@ public class Toolets {
     
     public static boolean writeString2File(String input, String filePath) {
         try {
-            BufferedWriter out = new BufferedWriter(new FileWriter(filePath));
+            
+            File file = createFile(filePath);
+            //out.println(file.getAbsolutePath());
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter out = new BufferedWriter(fw);
+            
+            //BufferedWriter out = new BufferedWriter(new FileWriter(filePath));
             out.write(input);
             out.close();
             return true;
         } catch (IOException e) {
-            System.out.println("Exception ");
+            e.printStackTrace();
             out.close();
             return false;
         }
@@ -425,8 +431,8 @@ public class Toolets {
     public static File createFile(String filePath) {
         File file = null;
         try {
-            // write JSON to a file
             file = new File(filePath);
+            out.println(file.getAbsolutePath());
             if (!file.exists()) {
                 file.getParentFile().mkdirs();
                 try {
