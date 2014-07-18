@@ -483,7 +483,6 @@ public class Toolets {
  
 		//convert map to JSON string
 		json = mapper.writeValueAsString(map);
- 
 		//out.println("Map2Json:"+json);
                 
                 return json;

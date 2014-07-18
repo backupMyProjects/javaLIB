@@ -8,24 +8,14 @@ package LeoLib.test;
  * Required : LeoLib.jar
  */
 
-import LeoLib.tools.debug;
 import LeoLib.tools.*;
-import java.text.DateFormat;
+import LeoLib.tools.debug;
+import static java.lang.System.out;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.TimeZone;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -34,7 +24,7 @@ import java.util.logging.Logger;
 public class test {
 
     static debug de = new debug(true);
-
+    
     /**
      *
      * @param args
@@ -43,7 +33,7 @@ public class test {
     public static void main(String[] args) throws Exception {
         //testDate();
         //System.out.println(customDateTime("2013-07-19 23:35:21", "yyyy-MM-dd hh:mm:ss"));
-        showNowINSecond();
+        //showNowINSecond();
     }
     
     public String getPath() {
@@ -51,7 +41,7 @@ public class test {
     }
     
     public static void showNowINSecond(){
-        System.out.println(System.currentTimeMillis()/1000);
+        out.println(System.currentTimeMillis()/1000);
     }
     
     public static void testLog(){
