@@ -15,7 +15,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 
 /**
  *
@@ -31,9 +30,10 @@ public class test {
      * @throws java.lang.Exception
      */
     public static void main(String[] args) throws Exception {
-        //testDate();
-        //System.out.println(customDateTime("2013-07-19 23:35:21", "yyyy-MM-dd hh:mm:ss"));
+        testDate();
+        //out.println(customDateTime("2013-07-19 23:35:21", "yyyy-MM-dd hh:mm:ss"));
         //showNowINSecond();
+        //testLog();
     }
     
     public String getPath() {
@@ -58,17 +58,17 @@ public class test {
         Date date = new Date();
         Date at = (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")).parse("2013-07-17 23:35:21");
         
-        System.out.println(date.getDate());
-        System.out.println(date.getDay());
-        System.out.println(date.getMonth()+1);
-        System.out.println(date.getYear()+1900);
+        out.println(date.getDate());
+        out.println(date.getDay());
+        out.println(date.getMonth()+1);
+        out.println(date.getYear()+1900);
         
-        System.out.println();
+        out.println();
         
-        System.out.println(at.getDate());
-        System.out.println(at.getDay());
-        System.out.println(at.getMonth()+1);
-        System.out.println(at.getYear()+1900);
+        out.println(at.getDate());
+        out.println(at.getDay());
+        out.println(at.getMonth()+1);
+        out.println(at.getYear()+1900);
         
     }
     
@@ -78,14 +78,14 @@ public class test {
         String outputFormat = null;
         if( date.getYear() - at.getYear() == 0 ){// this year
             if( date.getMonth() - at.getMonth() == 0 ){ // this month
-                System.out.println("this month");
+                out.println("this month");
                 if ( date.getDate() - at.getDate() < 7 ){
                     if ( date.getDay() - at.getDay() > 0 ){// this week
-                        System.out.println("this week");
+                        out.println("this week");
                         outputFormat = "E a hh:mm:ss";
                         return getDateTime(outputFormat, at);
                     }else if (date.getDay() - at.getDay() == 0){// today
-                        System.out.println("today");
+                        out.println("today");
                         outputFormat = "a hh:mm:ss";
                         return getDateTime(outputFormat, at);
                     }else{

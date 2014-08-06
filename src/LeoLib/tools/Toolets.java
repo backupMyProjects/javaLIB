@@ -452,14 +452,14 @@ public class Toolets {
         
         if (null == json) {return null;}
         
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, Object> map = new HashMap<String, Object>();
         ObjectMapper mapper = new ObjectMapper();
 
         try {
 
             //convert JSON string to Map
             map = mapper.readValue(json,
-                    new TypeReference<HashMap<String, String>>() {
+                    new TypeReference<HashMap<String, Object>>() {
             });
 
             //out.println("Json2Map:"+map);
