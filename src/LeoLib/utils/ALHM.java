@@ -11,22 +11,23 @@ import java.util.*;
  *
  * @author leo
  */
-public class ALHM extends java.util.ArrayList<HM> implements java.io.Serializable {
-
-    private static ArrayList<HM> alhm;
-
-    public ArrayList<HM> getALHM() {
-        return alhm;
+public class ALHM extends java.util.ArrayList<HashMap> implements java.io.Serializable {
+    
+    public ALHM(){
+        super();
+    }
+    public ALHM(ALHM alhm){
+        super(alhm);
+    }
+    public ALHM(HM hm){
+        this.add(hm);
     }
 
-    public void setALHM(ArrayList<HM> alhm) {
-        this.alhm = alhm;
-    }
     
     public void printAll(){
-        Toolets.printALHM((ArrayList)this);
+        Toolets.printALHM(this);
     }
     public void print(int i){
-        Toolets.printHM(alhm.get(i));
+        Toolets.printHM(this.get(i));
     }
 }

@@ -10,6 +10,8 @@ package LeoLib.test;
 
 import LeoLib.tools.*;
 import LeoLib.tools.debug;
+import LeoLib.utils.ALHM;
+import LeoLib.utils.HM;
 import static java.lang.System.out;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,10 +32,15 @@ public class test {
      * @throws java.lang.Exception
      */
     public static void main(String[] args) throws Exception {
-        testDate();
+        //testDate();
         //out.println(customDateTime("2013-07-19 23:35:21", "yyyy-MM-dd hh:mm:ss"));
         //showNowINSecond();
         //testLog();
+        
+        //HM hm = new HM(new HM("name", "leo"));
+        //hm.printAll();
+        
+        new ALHM( new HM("name", "leo") ).printAll();
     }
     
     public String getPath() {

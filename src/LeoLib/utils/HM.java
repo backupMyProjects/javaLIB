@@ -5,6 +5,7 @@
 package LeoLib.utils;
 
 import LeoLib.tools.Toolets;
+import static java.lang.System.out;
 import java.util.*;
 
 /**
@@ -12,14 +13,17 @@ import java.util.*;
  * @author leo
  */
 public class HM extends java.util.HashMap implements java.io.Serializable{
-    private HashMap<?, ?> hm; 
     
-    public HashMap<?, ?> getHM(){
-        return hm;
+    public HM(){
+        super();
     }
     
-    public void setHM(HashMap hm){
-        this.hm = hm;
+    public HM(HM hm){
+        super(hm);
+    }
+    
+    public HM(Object key, Object value){
+        this.put(key, value);
     }
     
     public void printAll(){
