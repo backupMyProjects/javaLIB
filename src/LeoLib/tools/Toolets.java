@@ -452,15 +452,14 @@ public class Toolets {
         
         if (null == json) {return null;}
         
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map map = null;
         ObjectMapper mapper = new ObjectMapper();
 
         try {
 
             //convert JSON string to Map
             map = mapper.readValue(json,
-                    new TypeReference<HashMap<String, Object>>() {
-            });
+                    new TypeReference<Map>() {});
 
             //out.println("Json2Map:"+map);
             
@@ -473,7 +472,7 @@ public class Toolets {
         return null;
     }
     
-    public static String Map2Json(Map<String, Object> map){
+    public static String Map2Json(Map map){
         if (null == map) {return null;}
         
         try {
@@ -493,7 +492,7 @@ public class Toolets {
         return null;
     }
     
-    public static boolean Map2JsonFile(Map<String, Object> map, String filePath) {
+    public static boolean Map2JsonFile(Map map, String filePath) {
         if (null == map || null == filePath) {return false;}
         
         ObjectMapper mapper = new ObjectMapper();
@@ -511,7 +510,7 @@ public class Toolets {
     
     public static Map JsonFile2Map(String jsonFile){
         if (null == jsonFile) {return null;}
-        Map<String, Object> map = null;
+        Map map = null;
         try {
 
             ObjectMapper mapper = new ObjectMapper();
@@ -519,7 +518,7 @@ public class Toolets {
             // read JSON from a file
             map = mapper.readValue(
                     new File(jsonFile),
-                    new TypeReference<Map<String, Object>>() {});
+                    new TypeReference<Map>() {});
 
             //out.println("JsonFile2Map:"+map);
             

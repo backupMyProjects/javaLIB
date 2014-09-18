@@ -17,8 +17,8 @@ import org.xmlpull.v1.XmlPullParserFactory;
 /**
  * 
  * @author leo
- * Parsing XML to ArrayList<HashMap<String, String>> by parse("XML String")
- * Reverting ArrayList<HashMap<String, String>> to XML String by revert(ArrayList<hashMap<String,String>>)
+ * Parsing XML to ALHM by parse("XML String")
+ * Reverting ALHM to XML String by revert(ArrayList<hashMap<String,String>>)
  * 
  */
 
@@ -29,12 +29,11 @@ public class GeneralXmlPullParser {
 
 	static int level = 0;
 
-	public static ArrayList<HashMap<String, String>> parse(String xmlPath) {
+	public static ArrayList parse(String xmlPath) {
 
 		// Log.i(tag, tag+".parse");
-
 		// 回傳物件
-		ArrayList<HashMap<String, String>> resultList = new ArrayList<HashMap<String, String>>();
+		ArrayList resultList = new ArrayList();
 
 		try {
 
@@ -61,7 +60,7 @@ public class GeneralXmlPullParser {
 
 			// 處理標籤
 			String tagName = "";
-			HashMap<String, String> resultHashMap = new HashMap<String, String>();
+			HashMap resultHM = new HashMap();
 			while (eventType != XmlPullParser.END_DOCUMENT) {
 
 				switch (eventType) {
@@ -85,7 +84,7 @@ public class GeneralXmlPullParser {
 					// ---do attribute here---
 					if (parser.getAttributeCount() > 0) {
 						// resultList.add(parser.getName() + attrStr);
-						resultHashMap.put(parser.getName(), attrStr);
+						resultHM.put(parser.getName(), attrStr);
 					}
 					// ----------------------
 
@@ -96,7 +95,7 @@ public class GeneralXmlPullParser {
 					// ---do tag value here---
 					if (!"".equals(parser.getText())) {
 						// resultList.add(tagName+":"+parser.getText());
-						resultHashMap.put(tagName, parser.getText());
+						resultHM.put(tagName, parser.getText());
 					}
 					// ----------------------
 
@@ -105,8 +104,8 @@ public class GeneralXmlPullParser {
 					level--;
 					// Log.i( tag, "</"+parser.getName()+">" );
 					if (level == 1) {
-						resultList.add((HashMap<String, String>) resultHashMap.clone());
-						resultHashMap.clear();
+						resultList.add( resultHM.clone());
+						resultHM.clear();
 					}
 					break;
 				case XmlPullParser.END_DOCUMENT:
@@ -131,15 +130,15 @@ public class GeneralXmlPullParser {
 		// return resultList;
 	}
         
-        public static String reverse(List<HashMap<String, String>> resultList){
+        public static String reverse(ArrayList alhm){
             String result = null;
-            if ( null != resultList ) {
+            if ( null != alhm ) {
                 result = "<data>";
-                for(int i = 0 ; i< resultList.size() ; i++){
+                for(int i = 0 ; i< alhm.size() ; i++){
                     result += "<item>";
-                    HashMap<String, Object> resultHM = (HashMap)resultList.get(i);
+                    HashMap resultHM = (HashMap)alhm.get(i);
                     int size = resultHM.keySet().size();
-                    for (String key : resultHM.keySet()) {
+                    for (Object key : resultHM.keySet()) {
                         result += "<"+key+">";
                         result += "<![CDATA[";
                         result += resultHM.get(key) ;

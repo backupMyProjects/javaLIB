@@ -5,19 +5,22 @@
 package LeoLib.utils;
 
 import LeoLib.tools.Toolets;
-import java.util.*;
+import java.util.ArrayList;
 
 /**
  *
  * @author leo
  */
-public class ALHM extends java.util.ArrayList<HashMap> implements java.io.Serializable {
+public class ALHM extends java.util.ArrayList implements java.io.Serializable {
     
     public ALHM(){
         super();
     }
     public ALHM(ALHM alhm){
-        super(alhm);
+        this.addAll(alhm);
+    }
+    public ALHM(ArrayList al){
+        this.addAll(al);
     }
     public ALHM(HM hm){
         this.add(hm);
@@ -28,6 +31,6 @@ public class ALHM extends java.util.ArrayList<HashMap> implements java.io.Serial
         Toolets.printALHM(this);
     }
     public void print(int i){
-        Toolets.printHM(this.get(i));
+        Toolets.printHM((HM)this.get(i));
     }
 }

@@ -19,7 +19,11 @@ public class HM extends java.util.HashMap implements java.io.Serializable{
     }
     
     public HM(HM hm){
-        super(hm);
+        this.putAll(hm);
+    }
+    
+    public HM(HashMap hm){
+        this.putAll(hm);
     }
     
     public HM(Object key, Object value){

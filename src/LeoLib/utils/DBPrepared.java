@@ -8,7 +8,7 @@ package LeoLib.utils;
 
 import static LeoLib.utils.Constants.*;
 import java.sql.*;
-import java.util.*;
+import java.util.List;
 
 /**
  *
@@ -68,21 +68,21 @@ public class DBPrepared {
     }
     
     /** Temp functions */
-    List<String> metaList;
-    public List<String> getMetaDataList(){return metaList;}
-    List contentList;
+    ALHM metaList;
+    public ALHM getMetaDataList(){return metaList;}
+    ALHM contentList;
     
-    public List getDataListCon(String sql, List<String> where) throws Exception{
+    public ALHM getDataListCon(String sql, List where) throws Exception{
         this.connect();
-        List result = getDataList(sql, where);
+        ALHM result = getDataList(sql, where);
         this.disconnect();
         return result;
     }
     
-    public List getDataList(String sql, List<String> where) throws Exception{
+    public ALHM getDataList(String sql, List where) throws Exception{
         rs = getData(sql, where);
-        metaList = new ArrayList();
-        contentList = new ArrayList();
+        metaList = new ALHM();
+        contentList = new ALHM();
         if (rs.getType() != java.sql.ResultSet.TYPE_FORWARD_ONLY){
             rs.beforeFirst();
         }
@@ -95,7 +95,7 @@ public class DBPrepared {
             }
 
             // add row data
-            HashMap hm = new HashMap();
+            HM hm = new HM();
             for (int j = 1; j <= rs.getMetaData().getColumnCount(); j++) {
                 hm.put(metaList.get(j - 1), rs.getString(j));
             }
@@ -104,41 +104,41 @@ public class DBPrepared {
         return contentList;
     }
 
-    protected ResultSet getData(String sql, List<String> where) throws Exception {
+    protected ResultSet getData(String sql, List where) throws Exception {
         pstmt = con.prepareStatement(sql);
         for (int i = 0; null!=where && i < where.size(); i++) {
-            pstmt.setString(i+1, where.get(i));
+            pstmt.setString(i+1, (String)where.get(i));
         }
         rs = pstmt.executeQuery();
         return rs;
     }
 
-    public List setDataCon(String sql, List<String> where) throws Exception{
+    public ALHM setDataCon(String sql, List where) throws Exception{
         
         this.connect();
-        List contentList = setData(sql, where);
+        ALHM contentList = setData(sql, where);
         this.disconnect();
         
         return contentList;
     }
     
-    protected List setData(String sql, List<String> where) throws Exception {
+    protected ALHM setData(String sql, List where) throws Exception {
         
         int result = setData(sql, where, true);
-        HashMap hm = new HashMap();
+        HM hm = new HM();
         hm.put("result", result);
-        List contentList = new ArrayList();
+        ALHM contentList = new ALHM();
         contentList.add(hm);
         
         return contentList;
     }
 
-    protected int setData(String sql, List<String> where, boolean autoCommit) throws Exception {
+    protected int setData(String sql, List where, boolean autoCommit) throws Exception {
         int result = 0;
         con.setAutoCommit(autoCommit);
         pstmt = con.prepareStatement(sql);
         for (int i = 0; null!=where && i < where.size(); i++) {
-            pstmt.setString(i+1, where.get(i));
+            pstmt.setString(i+1, (String)where.get(i));
         }
         result = pstmt.executeUpdate();
         return result;
