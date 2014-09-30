@@ -60,106 +60,12 @@ public class test {
      * @throws java.lang.Exception
      */
     public static void main(String[] args) throws Exception {
-        //testDate();
-        //out.println(customDateTime("2013-07-19 23:35:21", "yyyy-MM-dd hh:mm:ss"));
-        //showNowINSecond();
-        //testLog();
         
-        HM hm = (HM) new HashMap();
         
-        //HM hm = new HM(new HM("name", "leo"));
-        //hm.printAll();
-        List<NameValuePair> nvp = new ArrayList<NameValuePair>();
-		nvp.add(new BasicNameValuePair("payway", "migs"));
-		nvp.add(new BasicNameValuePair("merchantData1", "TEST112345680NTD"));
-		nvp.add(new BasicNameValuePair("merchantData2", "9E00A7B2"));
-		nvp.add(new BasicNameValuePair("orderId", "1996"));
-		nvp.add(new BasicNameValuePair("authAmnt", "100"));
-		nvp.add(new BasicNameValuePair("currency", "5"));
-		nvp.add(new BasicNameValuePair("cardType", "Visa"));
-		nvp.add(new BasicNameValuePair("cardNo", "4005550000000001"));
-		nvp.add(new BasicNameValuePair("expiredDate", "1705"));
-		nvp.add(new BasicNameValuePair("cvv", "100"));
-		//nvp.add(new BasicNameValuePair("exactReq", ""));
-		nvp.add(new BasicNameValuePair("returnType", "XML"));
-		//nvp.add(new BasicNameValuePair("returnURL", ""));
-        String result = HttpConnector.postDataInGIP("http://10.24.100.135:8080/ePayService/payment/Pay.auth.do", nvp);
-        //String result = postDataInGIP("http://10.24.100.135:8080/ePayService/payment/Pay.auth.do", nvp);
-        out.println(result);
-        //new ALHM( new HM("name", "leo") ).printAll();
+        
     }
     
-    public static String postDataInGIP(String url, List<NameValuePair> nameValuePairs) {
-		DefaultHttpClient httpclient = null;
-	    HttpPost httppost = null;
-		HttpResponse response = null;
-		String result = "";
-                out.println("1");
-		try {
-			httpclient = getHttpClient();
-			httppost = getHttpPost(url);
-			
-			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs, HTTP.UTF_8));
-
-			response = httpclient.execute(httppost);
-			int statusCode = response.getStatusLine().getStatusCode();
-
-			InputStream is = response.getEntity().getContent();
-
-			Header contentEncoding = response.getFirstHeader("Content-Encoding");
-			if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
-				is = new GZIPInputStream(new BufferedInputStream(is));
-			}
-			//return is;
-			BufferedReader bf = new BufferedReader(new InputStreamReader(is));
-
-			String s = null;
-			while ((s = bf.readLine()) != null) result += s;
-
-		} catch (ClientProtocolException e) {
-			result = "<exception>ClientProtocolException</exception>";
-			e.printStackTrace();
-		}catch (ConnectTimeoutException e){
-			result = "<exception>ConnectTimeoutException</exception>";
-		    e.printStackTrace();
-		} catch (IOException e) {
-			result = "<exception>IOException</exception>";
-			e.printStackTrace();
-		} catch (Exception e) {
-			result = "<exception>Exception</exception>";
-			e.printStackTrace();
-		} finally {
-
-			/*
-			 * if (!post.isAborted()) {
-			 * 
-			 * post.abort(); } httpclient = null;
-			 */
-
-		}
-		
-		return result;
-
-	}
     
-    private static HttpPost getHttpPost(String url) {
-		HttpPost httpPost = new HttpPost(url);
-		// 设置 请求超时时间
-		httpPost.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT, 5000);
-		httpPost.setHeader("Connection", "Keep-Alive");
-		httpPost.addHeader("Accept-Encoding", "gzip");
-		return httpPost;
-	}
-	
-	private static DefaultHttpClient getHttpClient() {
-		DefaultHttpClient httpClient = new DefaultHttpClient();
-
-		// 设置 连接超时时间
-		//httpClient.getParams().setParameter(HttpConnectionParams.CONNECTION_TIMEOUT, 5000);
-		//httpClient.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT, 5000);
-		httpClient.getParams().setParameter("http.protocol.content-charset", "UTF_8");
-		return httpClient;
-	}
     
     public String getPath() {
         return this.getClass().getResource("/").getPath();

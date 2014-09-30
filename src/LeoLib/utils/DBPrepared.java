@@ -9,6 +9,8 @@ package LeoLib.utils;
 import static LeoLib.utils.Constants.*;
 import java.sql.*;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -113,13 +115,18 @@ public class DBPrepared {
         return rs;
     }
 
-    public ALHM setDataCon(String sql, List where) throws Exception{
+    public ALHM setDataCon(String sql, List where) {
         
-        this.connect();
-        ALHM contentList = setData(sql, where);
-        this.disconnect();
-        
-        return contentList;
+        try {
+            this.connect();
+            ALHM contentList = setData(sql, where);
+            this.disconnect();
+            
+            return contentList;
+        } catch (Exception ex) {
+            Logger.getLogger(DBPrepared.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     protected ALHM setData(String sql, List where) throws Exception {

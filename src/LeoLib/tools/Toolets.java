@@ -9,12 +9,15 @@ import LeoLib.utils.HM;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import static java.lang.System.*;
 
@@ -398,7 +401,17 @@ public class Toolets {
 	}
 
     public static String parmGetter(HttpServletRequest request, String target) {
-        return request.getParameter(target) != null ? request.getParameter(target) : "";
+        if ( null != request.getParameter(target) ){
+            return request.getParameter(target);
+        }else if ( null != request.getAttribute(target) ){
+            Object obj = request.getAttribute(target);
+            if ( "String".equals(obj.getClass().getName()) ) {
+                return (String)request.getAttribute(target);
+            }else{
+                out.println(TAG + ":" + "parmGetter:" + "getAttribute type Not String");
+            }
+        }
+        return "";
     }
 
     public static void showParm(HttpServletRequest request) {
@@ -528,6 +541,34 @@ public class Toolets {
             e.printStackTrace();
         }
         return null;
+    }
+    
+    public static void Serialization(Object input , String file) {
+        try {
+            FileOutputStream fos = new FileOutputStream(file + ".dat");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(input);
+            oos.close();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static Object DeSerialization(String file) {
+    	Object result = null;
+        try {
+            FileInputStream fis = new FileInputStream(file + ".dat");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            result = (Object) ois.readObject();
+            ois.close();
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
 }
