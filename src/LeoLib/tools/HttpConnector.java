@@ -31,6 +31,9 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 public class HttpConnector {
+    
+    protected static int timeout = 30000;
+    public static int getTimeout(){return timeout;};
 
     public static String getData(String url) {
 
@@ -96,14 +99,17 @@ public class HttpConnector {
         return outputString;
     }
 
-    public static String postDataInGIP(String url, List<NameValuePair> nameValuePairs) {
+    public static String postDataInGIP(String url, List<NameValuePair> nameValuePairs){
+        return postDataInGIP( url,  nameValuePairs, timeout);
+    }
+    public static String postDataInGIP(String url, List<NameValuePair> nameValuePairs, int timeout) {
         DefaultHttpClient httpclient = null;
         HttpPost httppost = null;
         HttpResponse response = null;
         String result = "";
         try {
             httpclient = getHttpClient();
-            httppost = getHttpPost(url);
+            httppost = getHttpPost(url, timeout);
 
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs, HTTP.UTF_8));
 
@@ -150,10 +156,9 @@ public class HttpConnector {
 
     }
 
-    private static HttpPost getHttpPost(String url) {
+    private static HttpPost getHttpPost(String url, int timeout) {
         HttpPost httpPost = new HttpPost(url);
-        // 设置 请求超时时间
-        httpPost.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT, 5000);
+        httpPost.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT, timeout);
         httpPost.setHeader("Connection", "Keep-Alive");
         httpPost.addHeader("Accept-Encoding", "gzip");
         return httpPost;
@@ -161,8 +166,6 @@ public class HttpConnector {
 
     private static DefaultHttpClient getHttpClient() {
         DefaultHttpClient httpClient = new DefaultHttpClient();
-
-		// 设置 连接超时时间
         //httpClient.getParams().setParameter(HttpConnectionParams.CONNECTION_TIMEOUT, 5000);
         //httpClient.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT, 5000);
         httpClient.getParams().setParameter("http.protocol.content-charset", "UTF_8");

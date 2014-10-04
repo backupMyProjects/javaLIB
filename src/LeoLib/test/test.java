@@ -10,41 +10,14 @@ package LeoLib.test;
 
 import LeoLib.tools.*;
 import LeoLib.tools.debug;
-import LeoLib.utils.ALHM;
-import LeoLib.utils.HM;
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import LeoLib.utils.DBPrepared;
+import static LeoLib.utils.DBPrepared.MYSQL_DRIVER;
 import static java.lang.System.out;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.zip.GZIPInputStream;
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ConnectTimeoutException;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
 
 /**
  *
@@ -60,12 +33,26 @@ public class test {
      * @throws java.lang.Exception
      */
     public static void main(String[] args) throws Exception {
-        
-        
+        String test  = "";
+        test.getClass().getName();
+        System.out.println(test.getClass().getName());
+        System.out.println(java.lang.String.class.getName());
+        //testDBP();
         
     }
     
-    
+    public static void testDBP() throws Exception{
+        DBPrepared dbp = new DBPrepared(
+                MYSQL_DRIVER, 
+                "jdbc:mysql://leochen.i234.me:3306/acer_newsstand?useUnicode=true&characterEncoding=utf-8",
+                "acer",
+                "qpwoeiruty"
+        );
+        ArrayList condictionList = new ArrayList();
+        condictionList.add("確認購買");
+        ArrayList result = dbp.getInstanceCon("SELECT * FROM purchaseflow_map WHERE id = ?", condictionList);
+        Toolets.printArrayListHashMap(result);
+    }
     
     public String getPath() {
         return this.getClass().getResource("/").getPath();

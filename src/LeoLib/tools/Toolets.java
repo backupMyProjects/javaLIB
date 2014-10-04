@@ -405,7 +405,7 @@ public class Toolets {
             return request.getParameter(target);
         }else if ( null != request.getAttribute(target) ){
             Object obj = request.getAttribute(target);
-            if ( "String".equals(obj.getClass().getName()) ) {
+            if ( java.lang.String.class.getName().equals(obj.getClass().getName()) ) {
                 return (String)request.getAttribute(target);
             }else{
                 out.println(TAG + ":" + "parmGetter:" + "getAttribute type Not String");
