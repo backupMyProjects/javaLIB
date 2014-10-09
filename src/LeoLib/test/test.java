@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  *
@@ -33,11 +34,25 @@ public class test {
      * @throws java.lang.Exception
      */
     public static void main(String[] args) throws Exception {
-        String test  = "";
-        test.getClass().getName();
-        System.out.println(test.getClass().getName());
-        System.out.println(java.lang.String.class.getName());
+//        String test = "";
+//        test.getClass().getName();
+//        System.out.println(test.getClass().getName());
+//        System.out.println(java.lang.String.class.getName());
         //testDBP();
+        
+        HashMap hm = new HashMap();
+        hm.put("1","1");
+        hm.put("1","2");
+        Toolets.printHM(hm);
+        ArrayList al = new ArrayList();
+        al.addAll(hm.keySet());
+        
+        String test1 = "123";
+        out.println(test1.intern());
+        test1 = test1.concat("5");
+        out.println(test1.intern());
+        test1 = test1 + "4";
+        out.println(test1.intern());
         
     }
     
