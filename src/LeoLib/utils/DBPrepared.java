@@ -51,12 +51,12 @@ public class DBPrepared {
     /**
      * not support sqlite now : 2014.05.22
      */
-    public void connectInstance() throws Exception {
+    public void connect() throws Exception {
         Class.forName(driverStr);
         con = DriverManager.getConnection(connectStr, account, password);
     }
 
-    public void disconnectInstance() throws Exception {
+    public void disconnect() throws Exception {
         if (null != rs) {
             rs.close();
         }
@@ -76,19 +76,18 @@ public class DBPrepared {
     public ALHM getMetaDataList() {
         return metaList;
     }
-    ALHM contentList;
 
-    public ALHM getInstanceCon(String sql, List where) throws Exception {
-        this.connectInstance();
-        ALHM result = getInstance(sql, where);
-        this.disconnectInstance();
+    public ALHM getDataCon(String sql, List valueList) throws Exception {
+        this.connect();
+        ALHM result = getData(sql, valueList);
+        this.disconnect();
         return result;
     }
 
-    public ALHM getInstance(String sql, List where) throws Exception {
-        rs = getData(sql, where);
+    public ALHM getData(String sql, List valueList) throws Exception {
+        rs = exeQuery(sql, valueList);
         metaList = new ALHM();
-        contentList = new ALHM();
+        ALHM resultList = new ALHM();
         if (rs.getType() != java.sql.ResultSet.TYPE_FORWARD_ONLY) {
             rs.beforeFirst();
         }
@@ -104,58 +103,58 @@ public class DBPrepared {
             for (int j = 1; j <= rs.getMetaData().getColumnCount(); j++) {
                 hm.put(metaList.get(j - 1), rs.getString(j));
             }
-            contentList.add(hm);
+            resultList.add(hm);
         }
-        return contentList;
+        return resultList;
     }
 
-    public ALHM setInstanceCon(String sql, List where) throws Exception {
+    public ALHM setInstanceCon(String sql, List valueList) throws Exception {
 
-        this.connectInstance();
-        ALHM contentList = setInstance(sql, where);
-        this.disconnectInstance();
+        this.connect();
+        ALHM resultList = setData(sql, valueList);
+        this.disconnect();
 
-        return contentList;
+        return resultList;
     }
 
-    public ALHM setInstance(String sql, List where) throws Exception {
+    public ALHM setData(String sql, List valueList) throws Exception {
 
-        int result = setData(sql, where, true);
+        int result = exeUpdate(sql, valueList, true);
         HM hm = new HM();
         hm.put("result", result);
-        ALHM contentList = new ALHM();
-        contentList.add(hm);
+        ALHM resultList = new ALHM();
+        resultList.add(hm);
 
-        return contentList;
+        return resultList;
     }
 
-    public ALHM setInstance(String sql, List where, boolean autoCommit) throws Exception {
+    public ALHM setData(String sql, List valueList, boolean autoCommit) throws Exception {
 
-        int result = setData(sql, where, autoCommit);
+        int result = exeUpdate(sql, valueList, autoCommit);
         HM hm = new HM();
         hm.put("result", result);
-        ALHM contentList = new ALHM();
-        contentList.add(hm);
+        ALHM resultList = new ALHM();
+        resultList.add(hm);
 
-        return contentList;
+        return resultList;
     }
     
     // Basic Function
-    protected ResultSet getData(String sql, List condictionList) throws Exception {
+    protected ResultSet exeQuery(String sql, List valueList) throws Exception {
         pstmt = con.prepareStatement(sql);
-        for (int i = 0; null != condictionList && i < condictionList.size(); i++) {
-            pstmt.setString(i + 1, (String) condictionList.get(i));
+        for (int i = 0; null != valueList && i < valueList.size(); i++) {
+            pstmt.setString(i + 1, (String) valueList.get(i));
         }
         rs = pstmt.executeQuery();
         return rs;
     }
 
-    protected int setData(String sql, List where, boolean autoCommit) throws Exception {
+    protected int exeUpdate(String sql, List valueList, boolean autoCommit) throws Exception {
         int result = 0;
         con.setAutoCommit(autoCommit);
         pstmt = con.prepareStatement(sql);
-        for (int i = 0; null != where && i < where.size(); i++) {
-            pstmt.setString(i + 1, (String) where.get(i));
+        for (int i = 0; null != valueList && i < valueList.size(); i++) {
+            pstmt.setString(i + 1, (String) valueList.get(i));
         }
         result = pstmt.executeUpdate();
         return result;

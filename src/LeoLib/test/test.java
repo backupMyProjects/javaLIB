@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -38,35 +39,81 @@ public class test {
 //        test.getClass().getName();
 //        System.out.println(test.getClass().getName());
 //        System.out.println(java.lang.String.class.getName());
-        //testDBP();
         
-        HashMap hm = new HashMap();
-        hm.put("1","1");
-        hm.put("1","2");
-        Toolets.printHM(hm);
-        ArrayList al = new ArrayList();
-        al.addAll(hm.keySet());
-        
-        String test1 = "123";
-        out.println(test1.intern());
-        test1 = test1.concat("5");
-        out.println(test1.intern());
-        test1 = test1 + "4";
-        out.println(test1.intern());
+        testDBP("setInstance&getInstance");
         
     }
     
-    public static void testDBP() throws Exception{
+    public static void testDBP(String target) throws Exception{
         DBPrepared dbp = new DBPrepared(
                 MYSQL_DRIVER, 
-                "jdbc:mysql://leochen.i234.me:3306/acer_newsstand?useUnicode=true&characterEncoding=utf-8",
+                "jdbc:mysql://leochen.i234.me:3306/test?useUnicode=true&characterEncoding=utf-8",
                 "acer",
                 "qpwoeiruty"
         );
-        ArrayList condictionList = new ArrayList();
-        condictionList.add("確認購買");
-        ArrayList result = dbp.getInstanceCon("SELECT * FROM purchaseflow_map WHERE id = ?", condictionList);
-        Toolets.printArrayListHashMap(result);
+        
+        ArrayList valueList = null;
+        List result = null;
+        switch(target){
+            case "getInstanceCon" : 
+                valueList = new ArrayList();
+                valueList.add("22");
+                result = dbp.getInstanceCon("SELECT * FROM bookshelf where user_id = ?", valueList);
+                out.println("size : "+result.size());
+                Toolets.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
+                break;
+            case "setInstanceCon:Insert" :
+                valueList = new ArrayList();
+                valueList.add("22");
+                valueList.add("1999");
+                valueList.add("cover");
+                valueList.add("title");
+                valueList.add("number");
+                valueList.add("2");
+                result = dbp.setInstanceCon("INSERT INTO bookshelf "
+                        + "(USER_ID, BOOK_ID, BOOK_COVER, BOOK_TITLE, transNo, CHANNEL_ID) "
+                        + "VALUES (?,?,?,?,?,?)", valueList);
+                out.println("size : "+result.size());
+                Toolets.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
+                break;
+                
+            case "setInstanceCon:Update" :
+                valueList = new ArrayList();
+                valueList.add("cover3");
+                valueList.add("22");
+                valueList.add("1999");
+                result = dbp.setInstanceCon("UPDATE bookshelf SET "
+                        + "BOOK_COVER = ? "
+                        + "WHERE USER_ID = ? AND book_ID = ?", valueList);
+                out.println("size : "+result.size());
+                Toolets.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
+                break;
+                
+            case "setInstance&getInstance" :
+                valueList = new ArrayList();
+                valueList.add("cover4");
+                valueList.add("22");
+                valueList.add("1999");
+                dbp.connectInstance();
+                result = dbp.setInstance(
+                        "UPDATE bookshelf SET "
+                        + "BOOK_COVER = ? "
+                        + "WHERE USER_ID = ? AND book_ID = ?", valueList);
+                out.println("size : "+result.size());
+                valueList = new ArrayList();
+                valueList.add("22");
+                valueList.add("1999");
+                result = dbp.getInstance(
+                        "SELECT * "
+                        + "FROM bookshelf "
+                        + "WHERE USER_ID = ? AND book_ID = ?", valueList);
+                out.println("size : "+result.size());
+                dbp.disconnectInstance();
+                Toolets.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
+                break;
+            default :
+                out.println("No Valid Target");
+        }
     }
     
     public String getPath() {
