@@ -6,6 +6,7 @@
  */
 package LeoLib.utils;
 
+import static java.lang.System.out;
 import java.sql.*;
 import java.util.List;
 
@@ -50,10 +51,12 @@ public class DBPrepared {
 
     /**
      * not support sqlite now : 2014.05.22
+     * Default AutoCommit : false
      */
     public void connect() throws Exception {
         Class.forName(driverStr);
         con = DriverManager.getConnection(connectStr, account, password);
+        con.setAutoCommit(false);
     }
 
     public void disconnect() throws Exception {
@@ -67,6 +70,18 @@ public class DBPrepared {
             con.close();
         }
     }
+    
+    public void setAutoCommit(boolean flag) throws Exception {
+        con.setAutoCommit(flag);
+    }
+    
+    public void commit() throws Exception {
+        con.commit();
+    }
+    
+    public void rollback() throws Exception {
+        con.rollback();
+    }
 
     /**
      * Temp functions
@@ -75,13 +90,6 @@ public class DBPrepared {
 
     public ALHM getMetaDataList() {
         return metaList;
-    }
-
-    public ALHM getDataCon(String sql, List valueList) throws Exception {
-        this.connect();
-        ALHM result = getData(sql, valueList);
-        this.disconnect();
-        return result;
     }
 
     public ALHM getData(String sql, List valueList) throws Exception {
@@ -108,34 +116,12 @@ public class DBPrepared {
         return resultList;
     }
 
-    public ALHM setInstanceCon(String sql, List valueList) throws Exception {
-
-        this.connect();
-        ALHM resultList = setData(sql, valueList);
-        this.disconnect();
-
-        return resultList;
-    }
-
     public ALHM setData(String sql, List valueList) throws Exception {
-
-        int result = exeUpdate(sql, valueList, true);
+        int result = exeUpdate(sql, valueList);
         HM hm = new HM();
         hm.put("result", result);
         ALHM resultList = new ALHM();
         resultList.add(hm);
-
-        return resultList;
-    }
-
-    public ALHM setData(String sql, List valueList, boolean autoCommit) throws Exception {
-
-        int result = exeUpdate(sql, valueList, autoCommit);
-        HM hm = new HM();
-        hm.put("result", result);
-        ALHM resultList = new ALHM();
-        resultList.add(hm);
-
         return resultList;
     }
     
@@ -143,15 +129,21 @@ public class DBPrepared {
     protected ResultSet exeQuery(String sql, List valueList) throws Exception {
         pstmt = con.prepareStatement(sql);
         for (int i = 0; null != valueList && i < valueList.size(); i++) {
-            pstmt.setString(i + 1, (String) valueList.get(i));
+            Object item = valueList.get(i);
+            //out.println(item.getClass().getName());
+            if ( "java.lang.String".equals(item.getClass().getName()) ){
+                pstmt.setString(i + 1, (String) item);
+            }else if( "java.lang.Integer".equals(item.getClass().getName()) ){
+                pstmt.setInt(i + 1, (Integer) item);
+            }
+            
         }
         rs = pstmt.executeQuery();
         return rs;
     }
 
-    protected int exeUpdate(String sql, List valueList, boolean autoCommit) throws Exception {
+    protected int exeUpdate(String sql, List valueList) throws Exception {
         int result = 0;
-        con.setAutoCommit(autoCommit);
         pstmt = con.prepareStatement(sql);
         for (int i = 0; null != valueList && i < valueList.size(); i++) {
             pstmt.setString(i + 1, (String) valueList.get(i));

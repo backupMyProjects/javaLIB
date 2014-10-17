@@ -40,7 +40,7 @@ public class test {
 //        System.out.println(test.getClass().getName());
 //        System.out.println(java.lang.String.class.getName());
         
-        testDBP("setInstance&getInstance");
+        testDBP("getData");
         
     }
     
@@ -55,47 +55,64 @@ public class test {
         ArrayList valueList = null;
         List result = null;
         switch(target){
-            case "getInstanceCon" : 
+            case "getData" : 
                 valueList = new ArrayList();
                 valueList.add("22");
-                result = dbp.getInstanceCon("SELECT * FROM bookshelf where user_id = ?", valueList);
+                valueList.add("1999");
+                valueList.add(1);
+                dbp.connect();
+                result = dbp.getData(
+                        "SELECT * "
+                        + "FROM bookshelf "
+                        + "WHERE user_id = ? AND book_id = ? "
+                        + "ORDER BY ? ASC", valueList);
                 out.println("size : "+result.size());
+                dbp.commit();
+                dbp.disconnect();
                 Toolets.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
                 break;
-            case "setInstanceCon:Insert" :
+            case "setData:Insert" :
                 valueList = new ArrayList();
                 valueList.add("22");
                 valueList.add("1999");
                 valueList.add("cover");
-                valueList.add("title");
+                valueList.add("title0");
                 valueList.add("number");
                 valueList.add("2");
-                result = dbp.setInstanceCon("INSERT INTO bookshelf "
+                dbp.connect();
+                result = dbp.setData(
+                        "INSERT INTO bookshelf "
                         + "(USER_ID, BOOK_ID, BOOK_COVER, BOOK_TITLE, transNo, CHANNEL_ID) "
                         + "VALUES (?,?,?,?,?,?)", valueList);
                 out.println("size : "+result.size());
+                dbp.commit();
+                dbp.disconnect();
                 Toolets.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
                 break;
                 
-            case "setInstanceCon:Update" :
+            case "setData:Update" :
                 valueList = new ArrayList();
                 valueList.add("cover3");
                 valueList.add("22");
                 valueList.add("1999");
-                result = dbp.setInstanceCon("UPDATE bookshelf SET "
+                dbp.connect();
+                result = dbp.setData(
+                        "UPDATE bookshelf SET "
                         + "BOOK_COVER = ? "
                         + "WHERE USER_ID = ? AND book_ID = ?", valueList);
                 out.println("size : "+result.size());
+                dbp.commit();
+                dbp.disconnect();
                 Toolets.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
                 break;
                 
-            case "setInstance&getInstance" :
+            case "setget" :
                 valueList = new ArrayList();
                 valueList.add("cover4");
                 valueList.add("22");
                 valueList.add("1999");
-                dbp.connectInstance();
-                result = dbp.setInstance(
+                dbp.connect();
+                result = dbp.setData(
                         "UPDATE bookshelf SET "
                         + "BOOK_COVER = ? "
                         + "WHERE USER_ID = ? AND book_ID = ?", valueList);
@@ -103,12 +120,13 @@ public class test {
                 valueList = new ArrayList();
                 valueList.add("22");
                 valueList.add("1999");
-                result = dbp.getInstance(
+                result = dbp.getData(
                         "SELECT * "
                         + "FROM bookshelf "
                         + "WHERE USER_ID = ? AND book_ID = ?", valueList);
                 out.println("size : "+result.size());
-                dbp.disconnectInstance();
+                dbp.commit();
+                dbp.disconnect();
                 Toolets.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
                 break;
             default :
