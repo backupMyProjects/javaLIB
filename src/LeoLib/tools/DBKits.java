@@ -110,7 +110,7 @@ public class DBKits {
                 if( !isNull(connectStr) ) {db.setConnectString(prefixSQLServer+connectStr);}
                 break;
             default : 
-                de.println("Wrong dbTypy:"+dbNow);
+                de.println("Wrong db Type:"+dbNow);
                 return connectFlag;
         }
         
