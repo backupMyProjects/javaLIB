@@ -545,7 +545,7 @@ public class Toolets {
     
     public static void Serialization(Object input , String file) {
         try {
-            FileOutputStream fos = new FileOutputStream(file + ".dat");
+            FileOutputStream fos = new FileOutputStream(file);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(input);
             oos.close();
@@ -558,7 +558,7 @@ public class Toolets {
     public static Object DeSerialization(String file) {
     	Object result = null;
         try {
-            FileInputStream fis = new FileInputStream(file + ".dat");
+            FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
             result = (Object) ois.readObject();
             ois.close();
