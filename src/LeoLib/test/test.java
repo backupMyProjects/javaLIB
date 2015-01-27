@@ -12,6 +12,7 @@ import LeoLib.tools.*;
 import LeoLib.tools.debug;
 import LeoLib.utils.DBPrepared;
 import static LeoLib.utils.DBPrepared.MYSQL_DRIVER;
+import java.io.File;
 import static java.lang.System.out;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -40,7 +41,14 @@ public class test {
 //        System.out.println(test.getClass().getName());
 //        System.out.println(java.lang.String.class.getName());
         
-        testDBP("getData");
+        //testDBP("getData");
+        
+        
+        Toolets.downloadFile2(
+                "http://ibobar-content.oss-cn-hangzhou.aliyuncs.com/book1869/hj1869_ipad.png", 
+                "D:\\ddd.png", 
+                100);
+        
         
     }
     
@@ -69,7 +77,7 @@ public class test {
                 out.println("size : "+result.size());
                 dbp.commit();
                 dbp.disconnect();
-                Toolets.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
+                DevelopTools.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
                 break;
             case "setData:Insert" :
                 valueList = new ArrayList();
@@ -87,7 +95,7 @@ public class test {
                 out.println("size : "+result.size());
                 dbp.commit();
                 dbp.disconnect();
-                Toolets.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
+                DevelopTools.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
                 break;
                 
             case "setData:Update" :
@@ -103,7 +111,7 @@ public class test {
                 out.println("size : "+result.size());
                 dbp.commit();
                 dbp.disconnect();
-                Toolets.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
+                DevelopTools.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
                 break;
                 
             case "setget" :
@@ -127,7 +135,7 @@ public class test {
                 out.println("size : "+result.size());
                 dbp.commit();
                 dbp.disconnect();
-                Toolets.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
+                DevelopTools.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
                 break;
             default :
                 out.println("No Valid Target");

@@ -4,6 +4,7 @@
  */
 package LeoLib.utils;
 
+import LeoLib.tools.DevelopTools;
 import LeoLib.tools.Toolets;
 import static java.lang.System.out;
 import java.util.*;
@@ -31,7 +32,7 @@ public class HM extends java.util.HashMap implements java.io.Serializable{
     }
     
     public void printAll(){
-        Toolets.printHM(this);
+        DevelopTools.printHM(this);
     }
     
 }

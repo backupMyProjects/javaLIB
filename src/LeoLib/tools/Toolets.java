@@ -24,9 +24,13 @@ import static java.lang.System.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -42,49 +46,6 @@ import org.codehaus.jackson.type.TypeReference;
 public class Toolets {
     protected static String TAG = Toolets.class.getName();
     
-    public static void printArrayListHashMap(ArrayList<HashMap<String, String>> inputALHM) {
-        Iterator<HashMap<String, String>> ita = inputALHM.iterator();
-        while (ita.hasNext()) {
-            HashMap itemHM = (HashMap) ita.next();
-            Iterator<String> keyIt = itemHM.keySet().iterator();
-            while (keyIt.hasNext()) {
-                String key = keyIt.next();
-                out.println(key + " : " + itemHM.get(key));
-            }
-        }
-    }
-
-    public static void printALHM(ArrayList<HashMap> inputALHM) {
-        // Check Value
-        Iterator<HashMap> ita = inputALHM.iterator();
-        while (ita.hasNext()) {
-            HashMap itemHM = (HashMap) ita.next();
-            printHM(itemHM);
-        }
-    }
-
-    public static void printHM(HashMap inputHM) {
-        /*
-         Iterator<String> KeyIt = inputHM.keySet().iterator();
-         while (KeyIt.hasNext()) {
-         String key = KeyIt.next().toString();
-         out.println(key + "=" + inputHM.get(key));
-         }
-         */
-
-        Iterator<String> keyIt = inputHM.keySet().iterator();
-        while (keyIt.hasNext()) {
-            String key = keyIt.next();
-            //out.println(obj.getClass().getName());
-            if ("java.util.ArrayList".equals(inputHM.get(key).getClass().getName())) {
-            	out.println(key + " ::: ");
-                printALHM((ArrayList) inputHM.get(key));
-            } else {
-                out.println(key + " : " + inputHM.get(key));
-            }
-        }
-    }
-
     /* Data Check */
     public static boolean notEmpList(List input) {
         return (input != null && input.size() > 0) ? true : false;
@@ -274,9 +235,11 @@ public class Toolets {
     }
 
     /* File Tool */
+    
+    static int stringBufferSize = 1000;
     public static String readFile2String(String filePath) {
         try {
-            StringBuffer fileData = new StringBuffer(1000);
+            StringBuffer fileData = new StringBuffer(stringBufferSize);
             BufferedReader reader = new BufferedReader(new FileReader(filePath));
             char[] buf = new char[1024];
             int numRead = 0;
@@ -314,28 +277,26 @@ public class Toolets {
         }
     }
 
-    
-    public static boolean downloadFile(String fileUrl, String fileLocal) {
+    static int byteArrBufferSize = 153600;
+    public static boolean downloadFile(String inFileURL, String outFilePath) {
         try {
             out.println("Connecting");
-            URL url = new URL(fileUrl);
+            URL url = new URL(inFileURL);
             url.openConnection();
             InputStream reader = url.openStream();
 
-            
-            LeoLib.tools.Toolets.createParentFolder(fileLocal);
-            FileOutputStream writer = new FileOutputStream(fileLocal);
-            byte[] buffer = new byte[153600];
+            LeoLib.tools.Toolets.createParentFolder(outFilePath);
+            FileOutputStream writer = new FileOutputStream(outFilePath);
+            byte[] buffer = new byte[byteArrBufferSize];
             int totalBytesRead = 0;
             int bytesRead = 0;
 
             //out.println("Reading file "+buffer.length/1024+"KB blocks at a time.");
-
             long startTime = System.currentTimeMillis();
 
             while ((bytesRead = reader.read(buffer)) > 0) {
                 writer.write(buffer, 0, bytesRead);
-                buffer = new byte[153600];
+                buffer = new byte[byteArrBufferSize];
                 totalBytesRead += bytesRead;
             }
 
@@ -347,58 +308,93 @@ public class Toolets {
             return true;
         } catch (Exception e) {
             //e.printStackTrace();
-        	err.println(TAG);
+            err.println(TAG);
             err.println(e);
-    		return false;
+            return false;
         }
     }
     
-    
-    public static boolean downloadFile2(String inFileURL, String outFilePath) {
-		try {
+    static int currentTimeout = 30000;
+    public static void setCurrentTimeout(int input){currentTimeout = input;}
+    public static int getCurrentTimeout(){return currentTimeout;}
+    public static boolean downloadFile2(String inFileURL, String outFilePath){
+        return downloadFile2(inFileURL, outFilePath, currentTimeout);
+    }
+    public static boolean downloadFile2(String inFileURL, String outFilePath, int timeout) {
+        boolean result = false;
+        FileOutputStream fileos = null;
+        try {
 
 			//boolean eof = false;
+            HttpURLConnection connect = (HttpURLConnection) (new URL(inFileURL))
+                    .openConnection();
+            connect.setRequestMethod("GET");
+            connect.setReadTimeout(timeout);
+            connect.setDoOutput(true);
+            connect.connect();
 
-			HttpURLConnection connect = (HttpURLConnection) (new URL(inFileURL))
-					.openConnection();
-			connect.setRequestMethod("GET");
-			connect.setDoOutput(true);
-			connect.connect();
+            // String PATH_op = Environment.getExternalStorageDirectory() +
+            // "/download/" + targetFileName;
+            LeoLib.tools.Toolets.createParentFolder(outFilePath);
+            fileos = new FileOutputStream(new File(outFilePath));
 
-			// String PATH_op = Environment.getExternalStorageDirectory() +
-			// "/download/" + targetFileName;
-			
-			LeoLib.tools.Toolets.createParentFolder(outFilePath);
-			FileOutputStream file = new FileOutputStream(new File(outFilePath));
+            InputStream is = connect.getInputStream();
+            byte[] buffer = new byte[1024];
+            int len1 = 0;
+            while ((len1 = is.read(buffer)) > 0) {
+                fileos.write(buffer, 0, len1);
+            }
 
-			InputStream is = connect.getInputStream();
-			byte[] buffer = new byte[1024];
-			int len1 = 0;
-			while ((len1 = is.read(buffer)) > 0) {
-				file.write(buffer, 0, len1);
-			}
-
-			file.close();
-			return true;
-
-		} catch (MalformedURLException e) {
-			err.println(e);
-			//e.printStackTrace();
-			return false;
-		} catch (ProtocolException e) {
-			err.println(e);
-			//e.printStackTrace();
-			return false;
-		} catch (FileNotFoundException e) {
-			err.println(e);
-			//e.printStackTrace();
-			return false;
-		} catch (IOException e) {
-			err.println(e);
-			//e.printStackTrace();
-			return false;
-		}
-	}
+            fileos.close();
+            result = true;
+        } catch (SocketTimeoutException e) {
+            _deleteFile(fileos, outFilePath);
+            err.println(e);
+        } catch (MalformedURLException e) {
+            _deleteFile(fileos, outFilePath);
+            err.println(e);
+        } catch (ProtocolException e) {
+            _deleteFile(fileos, outFilePath);
+            err.println(e);
+        } catch (FileNotFoundException e) {
+            _deleteFile(fileos, outFilePath);
+            err.println(e);
+        } catch (IOException e) {
+            _deleteFile(fileos, outFilePath);
+            err.println(e);
+        }finally{
+            _closeFileOS(fileos);
+            return result;
+        }
+    }
+    
+    private static void _deleteFile(FileOutputStream fileos, String outFilePath) {
+        if (null != fileos) {
+            try {
+                fileos.close();
+                fileos = null;
+                System.gc();
+                File file = new File(outFilePath);
+                out.println("file exists : "+file.exists());
+                //new File(outFilePath).deleteOnExit();
+                file.delete();
+                out.println("file exists : "+file.exists());
+            } catch (IOException ex) {
+                err.println(ex);
+            }
+        }
+    }
+    private static void _closeFileOS(FileOutputStream fileos) {
+        if (null != fileos) {
+            try {
+                fileos.close();
+                fileos = null;
+                System.gc();
+            } catch (IOException ex) {
+                err.println(ex);
+            }
+        }
+    }
 
     public static String parmGetter(HttpServletRequest request, String target) {
         if ( null != request.getParameter(target) ){
@@ -414,16 +410,7 @@ public class Toolets {
         return "";
     }
 
-    public static void showParm(HttpServletRequest request) {
-        Enumeration enu = request.getParameterNames();
-
-        while (enu.hasMoreElements()) {
-            String parmKey = enu.nextElement().toString();
-            out.println("parm key " + parmKey);
-            out.println("parm value " + request.getParameter(parmKey));
-        }
-
-    }
+    
 
     public static boolean createParentFolder(String filePath) {
 
