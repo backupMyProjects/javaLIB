@@ -5,7 +5,7 @@
 
 package LeoLib.tools;
 
-import LeoLib.tools.debug;
+import LeoLib.utils.Debug;
 import java.util.*;
 import LeoLib.tools.*;
 import java.sql.SQLException;
@@ -17,7 +17,7 @@ import static LeoLib.utils.Constants.DBServer.*;
  * @author leo
  */
 public class CommonDAO {
-    debug de = new debug(true);
+    Debug de = new Debug(true);
     
     protected APProperty appProperty = new APProperty(true);
     protected Properties appProp = appProperty.getAppProp();

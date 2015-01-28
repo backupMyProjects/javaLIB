@@ -7,6 +7,7 @@
 
 package LeoLib.tools;
 
+import LeoLib.utils.Debug;
 import static LeoLib.utils.Constants.*;
 import LeoLib.utils.Constants.DBServer;
 import static LeoLib.utils.Constants.DBServer.*;
@@ -28,7 +29,7 @@ import java.util.logging.Logger;
  * @author Leo Chen
  */
 public class DBKits {
-    protected debug de = new debug(false);
+    protected Debug de = new Debug(false);
     
     protected Properties dbProp;
 //    protected boolean checked = false;

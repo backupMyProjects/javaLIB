@@ -103,7 +103,7 @@ public class DBPrepared {
             // add meta data
             if (i == 1) {
                 for (int j = 1; j <= rs.getMetaData().getColumnCount(); j++) {
-                    metaList.add(rs.getMetaData().getColumnName(j));
+                    metaList.add(rs.getMetaData().getColumnLabel(j));
                 }
             }
             // add row data

@@ -1,3 +1,7 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package LeoLib.tools;
 
 import java.io.BufferedInputStream;
@@ -7,8 +11,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import static java.lang.System.err;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -23,8 +33,82 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
-public class HttpConnector {
+/**
+ *
+ * @author leo
+ */
+public class HttpServletTool {
+    protected static String TAG = HttpServletTool.class.getName();
+    
+    public static String getParm(HttpServletRequest request, String target) {
+        if ( null != request.getParameter(target) ){
+            return request.getParameter(target);
+        }else if ( null != request.getAttribute(target) ){
+            Object obj = request.getAttribute(target);
+            if ( java.lang.String.class.getName().equals(obj.getClass().getName()) ) {
+                return (String)request.getAttribute(target);
+            }else{
+                System.out.println(TAG + ":" + "parmGetter:" + "obj is a " + obj.getClass().getName());
+            }
+        }
+        return "";
+    }
+    
+    public static ArrayList<HashMap> getRequestInfo(){
+        return null;
+    }
 
+    public static HashMap getParmsMap(HttpServletRequest request) {
+        HashMap<String, Object> result = new HashMap();
+        Enumeration<String> enu = request.getParameterNames();
+        while (enu.hasMoreElements()) {
+            String item = enu.nextElement();
+            result.put(item, request.getParameter(item));
+        }
+        return result;
+    }
+    
+    public static HashMap getAttributesMap(HttpServletRequest request) {
+        HashMap<String, Object> result = new HashMap();
+        Enumeration<String> enu = request.getAttributeNames();
+        while (enu.hasMoreElements()) {
+            String item = enu.nextElement(); 
+            result.put(item, (String) request.getAttribute(item));
+        }
+        return result;
+    }
+    
+    public static HashMap getHeadersMap(HttpServletRequest request) {
+        HashMap<String, Object> result = new HashMap();
+        Enumeration<String> enu = request.getHeaderNames();
+        while (enu.hasMoreElements()) {
+            String item = enu.nextElement();
+            result.put(item, request.getHeader(item));
+        }
+        return result;
+    }
+    
+    public static String urlEncode(String input, String encode) {
+        try {
+            return URLEncoder.encode(input, encode);
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return "ENCODE FAILED";
+        }
+    }
+
+    public static String urlDecode(String input, String decode) {
+        try {
+            return URLDecoder.decode(input, decode);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return "DECODE FAILED";
+        }
+
+    }
+    
+    
     protected static int currentTimeout = 30000;
 
     public static void setCurrentTimeout(int input){currentTimeout = input;}
@@ -125,5 +209,5 @@ public class HttpConnector {
         defaultHttpClient.getParams().setParameter("http.protocol.content-charset", "UTF_8");
         return defaultHttpClient;
     }
-
+    
 }

@@ -9,7 +9,7 @@ package LeoLib.test;
  */
 
 import LeoLib.tools.*;
-import LeoLib.tools.debug;
+import LeoLib.utils.Debug;
 import LeoLib.utils.DBPrepared;
 import static LeoLib.utils.DBPrepared.MYSQL_DRIVER;
 import java.io.File;
@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class test {
 
-    static debug de = new debug(true);
+    static Debug de = new Debug(true);
     
     /**
      *
@@ -41,21 +41,22 @@ public class test {
 //        System.out.println(test.getClass().getName());
 //        System.out.println(java.lang.String.class.getName());
         
-        //testDBP("getData");
+        testDBP("getData");
         
-        
-        Toolets.downloadFile2(
-                "http://ibobar-content.oss-cn-hangzhou.aliyuncs.com/book1869/hj1869_ipad.png", 
-                "D:\\ddd.png", 
-                100);
-        
+        /*
+        FileTool.downloadFile2(
+                "http://ibobar-content.oss-cn-hangzhou.aliyuncs.com/book1869/hj1869_ipad.png",
+                "D:\\ddd.png",
+                100
+        );
+        */
         
     }
     
     public static void testDBP(String target) throws Exception{
         DBPrepared dbp = new DBPrepared(
                 MYSQL_DRIVER, 
-                "jdbc:mysql://leochen.i234.me:3306/test?useUnicode=true&characterEncoding=utf-8",
+                "jdbc:mysql://10.24.100.237:3306/acer_newsstand?useUnicode=true&characterEncoding=utf-8",
                 "acer",
                 "qpwoeiruty"
         );
@@ -65,19 +66,16 @@ public class test {
         switch(target){
             case "getData" : 
                 valueList = new ArrayList();
-                valueList.add("22");
-                valueList.add("1999");
                 valueList.add(1);
                 dbp.connect();
                 result = dbp.getData(
-                        "SELECT * "
-                        + "FROM bookshelf "
-                        + "WHERE user_id = ? AND book_id = ? "
-                        + "ORDER BY ? ASC", valueList);
+                        "SELECT name as THISIS "
+                        + "FROM getChannel "
+                        + "WHERE id = ?", valueList);
                 out.println("size : "+result.size());
                 dbp.commit();
                 dbp.disconnect();
-                Toolets.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
+                PrintTool.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
                 break;
             case "setData:Insert" :
                 valueList = new ArrayList();
@@ -95,7 +93,7 @@ public class test {
                 out.println("size : "+result.size());
                 dbp.commit();
                 dbp.disconnect();
-                Toolets.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
+                PrintTool.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
                 break;
                 
             case "setData:Update" :
@@ -111,7 +109,7 @@ public class test {
                 out.println("size : "+result.size());
                 dbp.commit();
                 dbp.disconnect();
-                Toolets.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
+                PrintTool.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
                 break;
                 
             case "setget" :
@@ -135,7 +133,7 @@ public class test {
                 out.println("size : "+result.size());
                 dbp.commit();
                 dbp.disconnect();
-                Toolets.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
+                PrintTool.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
                 break;
             default :
                 out.println("No Valid Target");

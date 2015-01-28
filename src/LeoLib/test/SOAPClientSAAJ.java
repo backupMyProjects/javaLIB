@@ -10,7 +10,8 @@ package LeoLib.test;
  *
  * @author Leo
  */
-import LeoLib.tools.GeneralXmlPullParser;
+import LeoLib.tools.PrintTool;
+import LeoLib.tools.XmlTool;
 import LeoLib.tools.Toolets;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -39,8 +40,8 @@ public class SOAPClientSAAJ {
         String result = new String(stream.toByteArray(), "UTF-8");
         System.out.println(result);
         
-        ArrayList resultList = GeneralXmlPullParser.parse(result);
-        Toolets.printArrayListHashMap(resultList);
+        ArrayList resultList = XmlTool.parse(result);
+        PrintTool.printArrayListHashMap(resultList);
     }
 
     private static SOAPMessage createSOAPRequest() throws Exception {

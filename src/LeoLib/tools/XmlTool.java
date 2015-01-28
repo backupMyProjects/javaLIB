@@ -21,9 +21,9 @@ import org.xmlpull.v1.XmlPullParserFactory;
  * String by revert(ArrayList<hashMap<String,String>>)
  *
  */
-public class GeneralXmlPullParser {
+public class XmlTool {
 
-    static String tag = GeneralXmlPullParser.class.getName();
+    static String tag = XmlTool.class.getName();
     static String result;
 
     static int level = 0;
