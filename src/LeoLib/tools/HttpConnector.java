@@ -7,113 +7,82 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import static java.lang.System.err;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ConnectTimeoutException;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 public class HttpConnector {
 
-    protected static int timeout = 30000;
+    protected static int currentTimeout = 30000;
 
-    public static int getTimeout() {
-        return timeout;
-    }
+    public static void setCurrentTimeout(int input){currentTimeout = input;}
+    public static int getCurrentTimeout(){return currentTimeout;}
 
-    ;
-
+    /** TODO **/
     public static String getData(String url) {
 
         String outputString = "";
 
-        // DefaultHttpClient
-        DefaultHttpClient httpclient = new DefaultHttpClient();
+        HttpClient httpclient = new DefaultHttpClient();
         HttpGet httpget = new HttpGet(url);
-        // ResponseHandler
         ResponseHandler<String> responseHandler = new BasicResponseHandler();
 
         try {
             outputString = httpclient.execute(httpget, responseHandler);
             //Log.i("HttpClientConnector", "Connect Success");
-        } catch (Exception e) {
-            err.println("Connect Failed");
-            e.printStackTrace();
+        } catch (IOException e) {
+            err.println(e);
         }
         httpclient.getConnectionManager().shutdown();
         return outputString;
 
-    }
-
-    /**
-     * No Yet
-     *
-     * @param url
-     * @param nameValuePairs
-     * @return
-     */
-    public static String getData(String url, HttpParams nameValuePairs) {
-
-        return "";
     }
 
     public static String postData(String url, List<NameValuePair> nameValuePairs) throws UnsupportedEncodingException, IOException {
+        return postData(url, nameValuePairs, currentTimeout);
+    }
+    public static String postData(String url, List<NameValuePair> nameValuePairs, int timeout) throws UnsupportedEncodingException, IOException {
         String outputString = "";
-        // Create a new HttpClient and Post Header
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost(url);
+        DefaultHttpClient httpclient = getDefaultHttpClient();
+        HttpPost httppost = getHttpPost(url, timeout);
 
-           // Add your data
-        //httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs,"UTF-8"));
         httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs, HTTP.UTF_8));
 
         ResponseHandler<String> responseHandler = new BasicResponseHandler();
-	        // Execute HTTP Post Request
         //outputString = httpclient.execute(httppost, responseHandler);
-        HttpResponse myhttpResponse = httpclient.execute(httppost);
-        if (myhttpResponse.getStatusLine().getStatusCode() == 200) {
-            outputString = EntityUtils.toString(myhttpResponse.getEntity(), HTTP.UTF_8);
-            //System.out.println(outputString);
+        HttpResponse httpResponse = httpclient.execute(httppost);
+        if (httpResponse.getStatusLine().getStatusCode() == 200) {
+            outputString = EntityUtils.toString(httpResponse.getEntity(), HTTP.UTF_8);
         }
 
         httpclient.getConnectionManager().shutdown();
         return outputString;
     }
 
-    public static String postDataInGIP(String url, List<NameValuePair> nameValuePairs) throws IOException {
-        return postDataInGIP(url, nameValuePairs, timeout);
+    public static String postDataInGZIP(String url, List<NameValuePair> nameValuePairs) throws IOException {
+        return postDataInGZIP(url, nameValuePairs, currentTimeout);
     }
 
-    public static String postDataInGIP(String url, List<NameValuePair> nameValuePairs, int timeout) throws UnsupportedEncodingException, IOException {
-        DefaultHttpClient httpclient = null;
-        HttpPost httppost = null;
-        HttpResponse response = null;
+    public static String postDataInGZIP(String url, List<NameValuePair> nameValuePairs, int timeout) throws UnsupportedEncodingException, IOException {
         String result = "";
 
-        httpclient = getHttpClient();
-        httppost = getHttpPost(url, timeout);
-
+        DefaultHttpClient httpclient = getDefaultHttpClient();
+        HttpPost httppost = getHttpPostGZIP(url, timeout);
         httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs, HTTP.UTF_8));
+        HttpResponse response = httpclient.execute(httppost);
 
-        response = httpclient.execute(httppost);
         int statusCode = response.getStatusLine().getStatusCode();
         System.out.println("statusCode : " + statusCode);
 
@@ -123,12 +92,11 @@ public class HttpConnector {
         if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
             is = new GZIPInputStream(new BufferedInputStream(is));
         }
-        //return is;
-        BufferedReader bf = new BufferedReader(new InputStreamReader(is));
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
-        String s = null;
-        while ((s = bf.readLine()) != null) {
-            result += s;
+        String str = null;
+        while ((str = br.readLine()) != null) {
+            result += str;
         }
 
         return result;
@@ -139,16 +107,23 @@ public class HttpConnector {
         HttpPost httpPost = new HttpPost(url);
         httpPost.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT, timeout);
         httpPost.setHeader("Connection", "Keep-Alive");
+        return httpPost;
+    }
+
+    private static HttpPost getHttpPostGZIP(String url, int timeout) {
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT, timeout);
+        httpPost.setHeader("Connection", "Keep-Alive");
         httpPost.addHeader("Accept-Encoding", "gzip");
         return httpPost;
     }
 
-    private static DefaultHttpClient getHttpClient() {
-        DefaultHttpClient httpClient = new DefaultHttpClient();
+    private static DefaultHttpClient getDefaultHttpClient() {
+        DefaultHttpClient defaultHttpClient = new DefaultHttpClient();
         //httpClient.getParams().setParameter(HttpConnectionParams.CONNECTION_TIMEOUT, 5000);
         //httpClient.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT, 5000);
-        httpClient.getParams().setParameter("http.protocol.content-charset", "UTF_8");
-        return httpClient;
+        defaultHttpClient.getParams().setParameter("http.protocol.content-charset", "UTF_8");
+        return defaultHttpClient;
     }
 
 }

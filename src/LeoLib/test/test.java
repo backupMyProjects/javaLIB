@@ -77,7 +77,7 @@ public class test {
                 out.println("size : "+result.size());
                 dbp.commit();
                 dbp.disconnect();
-                DevelopTools.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
+                Toolets.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
                 break;
             case "setData:Insert" :
                 valueList = new ArrayList();
@@ -95,7 +95,7 @@ public class test {
                 out.println("size : "+result.size());
                 dbp.commit();
                 dbp.disconnect();
-                DevelopTools.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
+                Toolets.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
                 break;
                 
             case "setData:Update" :
@@ -111,7 +111,7 @@ public class test {
                 out.println("size : "+result.size());
                 dbp.commit();
                 dbp.disconnect();
-                DevelopTools.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
+                Toolets.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
                 break;
                 
             case "setget" :
@@ -135,7 +135,7 @@ public class test {
                 out.println("size : "+result.size());
                 dbp.commit();
                 dbp.disconnect();
-                DevelopTools.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
+                Toolets.printArrayListHashMap((ArrayList<HashMap<String, String>>) result);
                 break;
             default :
                 out.println("No Valid Target");

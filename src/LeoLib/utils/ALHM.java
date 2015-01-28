@@ -4,7 +4,6 @@
  */
 package LeoLib.utils;
 
-import LeoLib.tools.DevelopTools;
 import LeoLib.tools.Toolets;
 import java.util.ArrayList;
 
@@ -29,9 +28,9 @@ public class ALHM extends java.util.ArrayList implements java.io.Serializable {
 
     
     public void printAll(){
-        DevelopTools.printALHM(this);
+        Toolets.printALHM(this);
     }
     public void print(int i){
-        DevelopTools.printHM((HM)this.get(i));
+        Toolets.printHM((HM)this.get(i));
     }
 }

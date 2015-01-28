@@ -122,6 +122,7 @@ public class DBPrepared {
         hm.put("result", result);
         ALHM resultList = new ALHM();
         resultList.add(hm);
+        out.println("test");
         return resultList;
     }
     

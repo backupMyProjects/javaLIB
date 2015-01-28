@@ -44,11 +44,11 @@ import org.codehaus.jackson.type.TypeReference;
  * @author leo merge @ 2012/3/5
  */
 public class Toolets {
-    protected static String TAG = Toolets.class.getName();
+    private static String TAG = Toolets.class.getName();
     
     /* Data Check */
     public static boolean notEmpList(List input) {
-        return (input != null && input.size() > 0) ? true : false;
+        return (input != null && input.size() > 0);
     }
 
     public static boolean isNumber(String input) {
@@ -57,35 +57,27 @@ public class Toolets {
             Integer check = Integer.parseInt(input);
             return true;
         } catch (NumberFormatException nfe) {
+            System.err.println(nfe);
             return false;
         }
     }
     
     @Deprecated
     public static boolean isEmpStr(String input) {
-        return (checkTwoStr("", input)) ? true : false;
+        return (checkTwoStr("", input));
     }
-    /** 
-     * Sun set isEmpStr
-     * this function return true, if input is null / ""
-     * */
     public static boolean isEmpty(String input) {
     	if( isNull(input) ){return true;}
-        return (checkTwoStr("", input)) ? true : false;
+        return (checkTwoStr("", input));
     }
 
     public static boolean isNull(Object input) {
-        return (input == null) ? true : false;
+        return (null == input);
     }
 
     public static boolean checkTwoStr(String a, String b) {
-    	if ( !isNull(a) && !isNull(b) ){
-            return (a.equals(b)) ? true : false;
-    	}else if ( isNull(a) && isNull(b) ){
-    		return true;
-    	}else{
-    		return false;
-    	}
+    	if ( !isNull(a) && !isNull(b) ){return (a.equals(b));}
+        else { return isNull(a) && isNull(b);}
     }
 
     /* String Tool */
@@ -93,17 +85,20 @@ public class Toolets {
     public static String getDateTime(String pattern, Object... dates) {
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         if (dates.length == 1) {
-            //System.out.println( dates[0].getClass().getName() );
-            if ("java.util.Date".equals(dates[0].getClass().getName())) {
-                return sdf.format((Date) dates[0]);
-            } else if ("java.lang.Long".equals(dates[0].getClass().getName())) {
-                Calendar cal = Calendar.getInstance();
-                cal.setTimeInMillis((Long) dates[0]);
-                //out.println("getTimeInMillis : "+cal.getTimeInMillis());
-                Date date = cal.getTime();
-                return sdf.format(date);
-            } else {/* nothing */
-
+            if (null != dates[0].getClass().getName()) {
+                //System.out.println( dates[0].getClass().getName() );
+                switch (dates[0].getClass().getName()) {
+                    case "java.util.Date":
+                        return sdf.format((Date) dates[0]);
+                    case "java.lang.Long":
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTimeInMillis((Long) dates[0]);
+                        //out.println("getTimeInMillis : "+cal.getTimeInMillis());
+                        Date date = cal.getTime();
+                        return sdf.format(date);
+                    default:
+                        break;
+                }
             }
         }
         return sdf.format(new Date());
@@ -237,46 +232,50 @@ public class Toolets {
     /* File Tool */
     
     static int stringBufferSize = 1000;
+    static int charArrBuffSize = 1024;
     public static String readFile2String(String filePath) {
         try {
             StringBuffer fileData = new StringBuffer(stringBufferSize);
             BufferedReader reader = new BufferedReader(new FileReader(filePath));
-            char[] buf = new char[1024];
+            char[] buf = new char[charArrBuffSize];
             int numRead = 0;
             while ((numRead = reader.read(buf)) != -1) {
                 String readData = String.valueOf(buf, 0, numRead);
                 fileData.append(readData);
-                buf = new char[1024];
+                buf = new char[charArrBuffSize];
             }
             reader.close();
             return fileData.toString();
 
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (IOException e) {
+            err.println(e);
         }
 
         return null;
     }
     
+    /** TODO : There is an error : out.close(); **/
     public static boolean writeString2File(String input, String filePath) {
         try {
             
             File file = createFile(filePath);
             //out.println(file.getAbsolutePath());
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
-            BufferedWriter out = new BufferedWriter(fw);
+            BufferedWriter bw = new BufferedWriter(fw);
             
             //BufferedWriter out = new BufferedWriter(new FileWriter(filePath));
-            out.write(input);
-            out.close();
+            bw.write(input);
+            bw.close();
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
-            out.close();
+            err.println(e);
+            //out.close();
             return false;
         }
     }
 
+    /** Download File **/
+    
     static int byteArrBufferSize = 153600;
     public static boolean downloadFile(String inFileURL, String outFilePath) {
         try {
@@ -324,8 +323,7 @@ public class Toolets {
         boolean result = false;
         FileOutputStream fileos = null;
         try {
-
-			//boolean eof = false;
+            //boolean eof = false;
             HttpURLConnection connect = (HttpURLConnection) (new URL(inFileURL))
                     .openConnection();
             connect.setRequestMethod("GET");
@@ -367,13 +365,12 @@ public class Toolets {
             return result;
         }
     }
-    
     private static void _deleteFile(FileOutputStream fileos, String outFilePath) {
         if (null != fileos) {
             try {
                 fileos.close();
                 fileos = null;
-                System.gc();
+                //System.gc();
                 File file = new File(outFilePath);
                 out.println("file exists : "+file.exists());
                 //new File(outFilePath).deleteOnExit();
@@ -389,31 +386,16 @@ public class Toolets {
             try {
                 fileos.close();
                 fileos = null;
-                System.gc();
+                //System.gc();
             } catch (IOException ex) {
                 err.println(ex);
             }
         }
     }
 
-    public static String parmGetter(HttpServletRequest request, String target) {
-        if ( null != request.getParameter(target) ){
-            return request.getParameter(target);
-        }else if ( null != request.getAttribute(target) ){
-            Object obj = request.getAttribute(target);
-            if ( java.lang.String.class.getName().equals(obj.getClass().getName()) ) {
-                return (String)request.getAttribute(target);
-            }else{
-                out.println(TAG + ":" + "parmGetter:" + "getAttribute type Not String");
-            }
-        }
-        return "";
-    }
-
+    /** File & Folder **/
     
-
     public static boolean createParentFolder(String filePath) {
-
         File parent = new File(filePath).getParentFile();
         if (!parent.exists() && !parent.mkdirs()) {
             throw new IllegalStateException("Couldn't create dir: " + parent);
@@ -423,30 +405,21 @@ public class Toolets {
         return false;
     }
     
-    public static boolean hasFile(String filePath){
-    	File file = new File(filePath);
-    	if (file.exists()){return true;}else{return false;}
+    public static File createFile(String filePath) {
+        File file = new File(filePath);
+        out.println(file.getAbsolutePath());
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return file;
     }
     
-    public static File createFile(String filePath) {
-        File file = null;
-        try {
-            file = new File(filePath);
-            out.println(file.getAbsolutePath());
-            if (!file.exists()) {
-                file.getParentFile().mkdirs();
-                try {
-                    file.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return file;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+    /** Jason **/
     
     public static Map Json2Map(String json) {
         
@@ -472,23 +445,23 @@ public class Toolets {
         return null;
     }
     
-    public static String Map2Json(Map map){
+    public static String Map2Json(Map map) {
         if (null == map) {return null;}
-        
+
         try {
- 
-		ObjectMapper mapper = new ObjectMapper();
-		String json = "";
- 
-		//convert map to JSON string
-		json = mapper.writeValueAsString(map);
+
+            ObjectMapper mapper = new ObjectMapper();
+            String json = "";
+
+            //convert map to JSON string
+            json = mapper.writeValueAsString(map);
 		//out.println("Map2Json:"+json);
-                
-                return json;
- 
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
+
+            return json;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
     
@@ -556,6 +529,50 @@ public class Toolets {
             e.printStackTrace();
         }
         return result;
+    }
+    
+    /** Print **/
+    public static void printArrayListHashMap(ArrayList<HashMap<String, String>> inputALHM) {
+        Iterator<HashMap<String, String>> ita = inputALHM.iterator();
+        while (ita.hasNext()) {
+            HashMap itemHM = (HashMap) ita.next();
+            Iterator<String> keyIt = itemHM.keySet().iterator();
+            while (keyIt.hasNext()) {
+                String key = keyIt.next();
+                out.println(key + " : " + itemHM.get(key));
+            }
+        }
+    }
+
+    public static void printALHM(ArrayList<HashMap> inputALHM) {
+        // Check Value
+        Iterator<HashMap> ita = inputALHM.iterator();
+        while (ita.hasNext()) {
+            HashMap itemHM = (HashMap) ita.next();
+            printHM(itemHM);
+        }
+    }
+
+    public static void printHM(HashMap inputHM) {
+        /*
+         Iterator<String> KeyIt = inputHM.keySet().iterator();
+         while (KeyIt.hasNext()) {
+         String key = KeyIt.next().toString();
+         out.println(key + "=" + inputHM.get(key));
+         }
+         */
+
+        Iterator<String> keyIt = inputHM.keySet().iterator();
+        while (keyIt.hasNext()) {
+            String key = keyIt.next();
+            //out.println(obj.getClass().getName());
+            if ("java.util.ArrayList".equals(inputHM.get(key).getClass().getName())) {
+            	out.println(key + " ::: ");
+                printALHM((ArrayList) inputHM.get(key));
+            } else {
+                out.println(key + " : " + inputHM.get(key));
+            }
+        }
     }
 
 }
