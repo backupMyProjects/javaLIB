@@ -6,7 +6,6 @@
  */
 package javalib.utils;
 
-import static java.lang.System.out;
 import java.sql.*;
 import java.util.List;
 
