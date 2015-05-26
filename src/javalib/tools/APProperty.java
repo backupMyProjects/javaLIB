@@ -20,7 +20,7 @@ public class APProperty {
     
     protected Properties appProp;
     protected Properties dbProp;
-    JavaFunctions jf = new JavaFunctions();
+    TooletsObj jf = new TooletsObj();
     String homePath = jf.getHomePath();
     
     public Properties getAppProp(){

@@ -4,7 +4,7 @@ package javalib.tools;
  *
  * @author leo
  */
-public class JavaFunctions {
+public class TooletsObj {
     public String getHomePath(){
         return getClass().getResource("/").getPath().replaceAll("classes/", "").replaceAll("%20", "\\ ");
     }

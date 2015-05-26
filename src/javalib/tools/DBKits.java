@@ -94,7 +94,7 @@ public class DBKits {
                 if( !isNull(connectStr) ) {db.setConnectString(prefixMySQL+connectStr);}
                 break;
             case SQLite:
-                JavaFunctions jf = new JavaFunctions();
+                TooletsObj jf = new TooletsObj();
                 preStr = envFilter+"."+SQLite+".";
                 connectStr = dbProp.getProperty(preStr+dbPrefix_connect);
                 if( !isNull(connectStr) ) {db.setConnectString(prefixSQLite+jf.getHomePath()+connectStr);}

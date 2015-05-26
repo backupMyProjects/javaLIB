@@ -50,8 +50,9 @@ public class HttpServletTool {
         return "";
     }
     
-    public static ArrayList<HashMap> getRequestInfo(){
-        //TODO.
+    //TODO.
+    //public static ArrayList<HashMap> getRequestInfo(){
+    private static ArrayList<HashMap> getRequestInfo(){
         return null;
     }
 

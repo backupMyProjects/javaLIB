@@ -56,9 +56,8 @@ public class StringTool {
     }
 
     public static String getRandomString(int stringLength) {
-
         String[] baseString = {
-        	"0", "1", "2", "3",
+            "0", "1", "2", "3",
             "4", "5", "6", "7", "8", "9",
             "a", "b", "c", "d", "e",
             "f", "g", "h", "i", "j",
@@ -69,7 +68,8 @@ public class StringTool {
             "E", "F", "G", "H", "I",
             "J", "K", "L", "M", "N",
             "O", "P", "Q", "R", "S",
-            "T", "U", "V", "W", "X", "Y", "Z"
+            "T", "U", "V", "W", "X", 
+            "Y", "Z"
         };
         Random random = new Random();
         int length = baseString.length;
