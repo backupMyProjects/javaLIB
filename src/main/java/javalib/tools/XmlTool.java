@@ -65,17 +65,16 @@ public class XmlTool {
 
                     // Define the TAG "||" for separate the tag name and the
                     // attribute value 0<tagName>, 1<attribute>, ...
-                    String attrStr = "";
+                    StringBuilder attrStr = new StringBuilder();
                     for (int i = 0; i < parser.getAttributeCount(); i++) {
-                        attrStr += "||" + parser.getAttributeName(i) + "=\""
-                                + parser.getAttributeValue(i) + "\"";
+                        attrStr.append("||").append(parser.getAttributeName(i)).append("=\"").append(parser.getAttributeValue(i)).append("\"");
                     }
 					// Log.i( tag, "<"+parser.getName() + attrStr +">" );
 
                     // ---do attribute here---
                     if (parser.getAttributeCount() > 0) {
                         // resultList.add(parser.getName() + attrStr);
-                        resultHM.put(parser.getName(), attrStr);
+                        resultHM.put(parser.getName(), attrStr.toString());
                     }
                     // ----------------------
 
@@ -113,27 +112,27 @@ public class XmlTool {
     }
 
     public static String reverse(ArrayList alhm) {
-        String result = null;
+        StringBuilder result = null;
         if (null != alhm) {
-            result = "<data>";
+            result = new StringBuilder("<data>");
             for (int i = 0; i < alhm.size(); i++) {
-                result += "<item>";
+                result.append("<item>");
                 HashMap resultHM = (HashMap) alhm.get(i);
                 int size = resultHM.keySet().size();
                 for (Object key : resultHM.keySet()) {
-                    result += "<" + key + ">";
-                    result += "<![CDATA[";
-                    result += resultHM.get(key);
-                    result += "]]>";
-                    result += "</" + key + ">";
+                    result.append("<").append(key).append(">");
+                    result.append("<![CDATA[");
+                    result.append(resultHM.get(key));
+                    result.append("]]>");
+                    result.append("</").append(key).append(">");
                 }
-                result += "</item>";
+                result.append("</item>");
             }
-            result += "</data>";
+            result.append("</data>");
         } else {
-            result = "<data />";
+            result = new StringBuilder("<data />");
         }
-        return result;
+        return result.toString();
     }
 
 }

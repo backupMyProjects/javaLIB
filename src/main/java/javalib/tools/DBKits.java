@@ -202,7 +202,7 @@ public class DBKits {
                      for(int j = 1 ; j <= rs.getMetaData().getColumnCount() ; j++){
                          de.println("No."+j+" Column Name is added." );
                          li_meta.add(rs.getMetaData().getColumnName(j));
-                         de.println("Meta List is : "+li_meta.get(j-1).toString());
+                         de.println("Meta List is : "+ li_meta.get(j-1));
                      }
                  }
 
@@ -339,7 +339,7 @@ public class DBKits {
     }
     
 
-    private String tag = this.toString() +" : ";
+    private String tag = this +" : ";
     private String getInsertSQL(String targetTable, Map<String, Object> keyMap, Map<String, Object> whereCondition){
     	String re = "";
         re += "INSERT into " + "`"+targetTable+"`" + 
@@ -377,83 +377,83 @@ public class DBKits {
     //--------------------------------------------------------------------------
     
     private String selectorCombine(List<String> selectorList){
-        String re = "";
+        StringBuilder re = new StringBuilder();
         if ( null != selectorList ) {
             String sepor = "`, `";
 
             for(String selector : selectorList){
                     de.println(tag+selector);
-                    re += sepor + selector;
+                    re.append(sepor).append(selector);
             }
-            re += "`";
-            re = re.replaceFirst(sepor, "`");
+            re.append("`");
+            re = new StringBuilder(re.toString().replaceFirst(sepor, "`"));
         } else {
-            re = "*";
+            re = new StringBuilder("*");
         }
     	
 
-        return re;
+        return re.toString();
     }
 
     private String orderCombine(List<String> orderByList){
-        String re = "";
+        StringBuilder re = new StringBuilder();
         String sepor = "`, `";
 
         for (String order : orderByList) {
             de.println(tag + order);
-            re += sepor + order;
+            re.append(sepor).append(order);
         }
-        re += "`";
-        re = re.replaceFirst(sepor, "`");
-        return re;
+        re.append("`");
+        re = new StringBuilder(re.toString().replaceFirst(sepor, "`"));
+        return re.toString();
     }
 
     private String whereCombine(Map<String, Object> whereCondition){
-        String re = "";
+        StringBuilder re = new StringBuilder();
         String sepor = " and ";
         for (String key : whereCondition.keySet()) {
             de.println(tag + key);
-            re += sepor + key + " = '" + whereCondition.get(key) + "'";
+            re.append(sepor).append(key).append(" = '").append(whereCondition.get(key)).append("'");
         }
-        re = re.replaceFirst(sepor, "");
-        return re;
+        re = new StringBuilder(re.toString().replaceFirst(sepor, ""));
+        return re.toString();
     }
 
     private String keyCombine(Map<String, Object> hm){
-    	String re = "";
+    	StringBuilder re = new StringBuilder();
     	String sepor = "`, `";
     	for(String key : hm.keySet()){
                 de.println(tag+key);
-    		re += sepor + key;
+    		re.append(sepor).append(key);
         }
-    	re += "`";
-    	re = re.replaceFirst(sepor, "`");
-    	return re;
+    	re.append("`");
+    	re = new StringBuilder(re.toString().replaceFirst(sepor, "`"));
+    	return re.toString();
     }
 
     private String valueCombine(Map<String, Object> hm){
-    	String re = "";
+    	StringBuilder re = new StringBuilder();
     	String sepor = "', '";
     	for(Object key : hm.values()){
                 de.println(tag+key);
-    		re += sepor + key;
+    		re.append(sepor).append(key);
         }
-    	re += "'";
-    	re = re.replaceFirst(sepor, "'");
-    	return re;
+    	re.append("'");
+    	re = new StringBuilder(re.toString().replaceFirst(sepor, "'"));
+    	return re.toString();
     }
 
     private String KeyValueCombine(Map<String, Object> hm){
-    	String re = "";
+    	StringBuilder re = new StringBuilder();
     	String sepor = " , `";
     	for(String key : hm.keySet()){
                 de.println(tag+key);
                 if ( hm.get(key) != null ){
-                    re += sepor + key + "` = '" + hm.get(key) + "'";
+                    re.append(sepor).append(key).append("` = '").append(hm.get(key)).append("'");
                 }
         }
-    	re = re.replaceFirst(sepor, "`");
-    	return re;
+    	re = new StringBuilder(re.toString().replaceFirst(sepor, "`"));
+    	return re.toString();
     }
 
 

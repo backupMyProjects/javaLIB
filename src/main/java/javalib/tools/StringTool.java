@@ -45,8 +45,8 @@ public class StringTool {
 
     private static String toHexString(byte[] in) {
         StringBuilder hexString = new StringBuilder();
-        for (int i = 0; i < in.length; i++) {
-            String hex = Integer.toHexString(0xFF & in[i]);
+        for (byte b : in) {
+            String hex = Integer.toHexString(0xFF & b);
             if (hex.length() == 1) {
                 hexString.append('0');
             }
@@ -73,21 +73,21 @@ public class StringTool {
         };
         Random random = new Random();
         int length = baseString.length;
-        String randomString = "";
+        StringBuilder randomString = new StringBuilder();
         for (int i = 0; i < length; i++) {
-            randomString += baseString[random.nextInt(length)];
+            randomString.append(baseString[random.nextInt(length)]);
         }
         random = new Random(System.currentTimeMillis());
-        String resultStr = "";
+        StringBuilder resultStr = new StringBuilder();
         for (int i = 0; i < stringLength; i++) {
-            resultStr += randomString.charAt(random.nextInt(randomString.length() - 1));
+            resultStr.append(randomString.charAt(random.nextInt(randomString.length() - 1)));
         }
-        return resultStr;
+        return resultStr.toString();
     }
 
     // number string with spliter
     public static String sortedString(String spliter, String... inputs) {
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         if (isNumber(spliter)) {
             spliter = ",";
@@ -96,10 +96,10 @@ public class StringTool {
         Integer[] intArr = sortInt(inputs);
         for (int i = 0; i < intArr.length; i++) {
             //out.println("intArr : "+intArr[i]);
-            result += (i != intArr.length - 1) ? intArr[i] + spliter : intArr[i];
+            result.append((i != intArr.length - 1) ? intArr[i] + spliter : intArr[i]);
         }
 
-        return result;
+        return result.toString();
     }
     
 }

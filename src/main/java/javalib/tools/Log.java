@@ -31,14 +31,14 @@ public final class Log {
         }
     }
     
-    public static enum Format{
+    public enum Format{
         FORMAT1,
         FORMAT2,
         FORMAT3,
         FORMAT4
     }
     
-    public static enum ReturnCode{
+    public enum ReturnCode{
         OK,
         FAIL,
         ERROR
@@ -79,35 +79,22 @@ public final class Log {
     //-----------------------------------------------------
     
     private static void printLog(Object logLevel, Object tag, Object msg) {
-        String output = "";
-        switch (format){
-            case FORMAT1 : 
-                output = 
-                    ( new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss(SSS)").format(new Date()) ) + ", " +
-                    logLevel.toString() + ", " + 
+        String output = switch (format) {
+            case FORMAT1 -> (new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss(SSS)").format(new Date())) + ", " +
+                    logLevel.toString() + ", " +
                     SystemUtil.getPID() + ", " +
-                    tag.toString() + ", " + 
+                    tag.toString() + ", " +
                     msg.toString();
-                    break;
-            case FORMAT2 : 
-                output = 
-                    logLevel.toString() + ", " + 
+            case FORMAT2 -> logLevel.toString() + ", " +
                     SystemUtil.getPID() + ", " +
-                    tag.toString() + ", " + 
+                    tag.toString() + ", " +
                     msg.toString();
-                    break;
-            case FORMAT3 : 
-                output = 
-                    SystemUtil.getPID() + ", " +
-                    tag.toString() + ", " + 
+            case FORMAT3 -> SystemUtil.getPID() + ", " +
+                    tag.toString() + ", " +
                     msg.toString();
-                    break;
-            case FORMAT4 : 
-                output = 
-                    tag.toString() + ", " + 
+            case FORMAT4 -> tag.toString() + ", " +
                     msg.toString();
-                    break;
-        }
+        };
         out.println(output);
     }
 

@@ -50,7 +50,7 @@ public class APProperty {
      * <BR>eg: <I>D:/=Programmer=/NetBeans/WebApp/web/</I> & <I>WebApp.properties</I>
      * <BR>And the file inside should be :
      * <BR>eg: <I>db.properties.[env_filter]=D:/=Programmer=/NetBeans/WebApp/web/WEB-INF/[properties_folder]/db.properties</I>
-     * @param SettingPath/SettingFile where/what the property setting file is
+     * @params SettingPath/SettingFile where/what the property setting file is
      */
     /*
     public APProperty(String SettingPath, String SettingFile) {

@@ -97,7 +97,7 @@ public class FileTool{
 
             long endTime = System.currentTimeMillis();
 
-            System.out.println("Done. " + (new Integer(totalBytesRead).toString()) + " bytes read (" + (new Long(endTime - startTime).toString()) + " millseconds).");
+            System.out.println("Done. " + (Integer.toString(totalBytesRead)) + " bytes read (" + (Long.toString(endTime - startTime)) + " millseconds).");
             writer.close();
             reader.close();
             return true;
@@ -231,12 +231,10 @@ public class FileTool{
         try {
             FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            result = (Object) ois.readObject();
+            result = ois.readObject();
             ois.close();
             fis.close();
-        } catch (IOException e) {
-            System.err.println(e);
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             System.err.println(e);
         }
         return result;

@@ -142,12 +142,11 @@ public class DBPrepared {
     }
 
     protected int exeUpdate(String sql, List valueList) throws Exception {
-        int result = 0;
         pstmt = con.prepareStatement(sql);
         for (int i = 0; null != valueList && i < valueList.size(); i++) {
             pstmt.setString(i + 1, (String) valueList.get(i));
         }
-        result = pstmt.executeUpdate();
+        int result = pstmt.executeUpdate();
         return result;
     }
 }

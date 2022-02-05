@@ -15,9 +15,8 @@ public class PrintTool extends ToolBase{
     protected static String TAG = PrintTool.class.getName();
     
     public static void printArrayListHashMap(ArrayList<HashMap<String, String>> inputALHM) {
-        Iterator<HashMap<String, String>> ita = inputALHM.iterator();
-        while (ita.hasNext()) {
-            HashMap itemHM = (HashMap) ita.next();
+        for (HashMap<String, String> stringStringHashMap : inputALHM) {
+            HashMap itemHM = stringStringHashMap;
             Iterator<String> keyIt = itemHM.keySet().iterator();
             while (keyIt.hasNext()) {
                 String key = keyIt.next();

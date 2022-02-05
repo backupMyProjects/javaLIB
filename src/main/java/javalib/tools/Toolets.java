@@ -8,7 +8,7 @@ import java.util.*;
  * @author leo merge @ 2012/3/5
  */
 public class Toolets {
-    private static String TAG = Toolets.class.getName();
+    private static final String TAG = Toolets.class.getName();
     
     /* Data Check */
     

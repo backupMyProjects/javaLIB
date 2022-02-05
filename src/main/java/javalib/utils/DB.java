@@ -96,9 +96,8 @@ public class DB {
     }
     
     public int exeModifySQL(String sql)throws Exception {
-        int result = 0;
         //try{
-            result=smt.executeUpdate(sql);
+        int result=smt.executeUpdate(sql);
         //}catch( SQLException sqlex ){
         //    de.println("SQL Statement : "+sql);
         //    de.println( "error in DB.exeModifySQL() : "+sqlex.getMessage() );
@@ -108,10 +107,9 @@ public class DB {
     }
     
     public int exeModifySQL(String sql, boolean autoCommit)throws Exception{
-        int result = 0;
         //System.out.println("con.getAutoCommit() ROOT 21 : " + con.getAutoCommit());
         con.setAutoCommit(autoCommit);
-        result=smt.executeUpdate(sql);
+        int result=smt.executeUpdate(sql);
         //System.out.println("con.getAutoCommit() ROOT 22 : " + con.getAutoCommit());
         return result;
     }

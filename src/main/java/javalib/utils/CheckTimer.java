@@ -35,7 +35,7 @@ public class CheckTimer extends Thread {
     public void run() {
         // Keep looping
         out.println("checking...");
-        for (;keepChecking;) {
+        while (keepChecking) {
             // Put the timer to sleep
             try {
                 Thread.sleep(checkRate);

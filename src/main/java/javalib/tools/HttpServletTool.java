@@ -70,8 +70,8 @@ public class HttpServletTool {
         HashMap<String, Object> result = new HashMap();
         Enumeration<String> enu = request.getAttributeNames();
         while (enu.hasMoreElements()) {
-            String item = enu.nextElement(); 
-            result.put(item, (String) request.getAttribute(item));
+            String item = enu.nextElement();
+            result.put(item, request.getAttribute(item));
         }
         return result;
     }
@@ -132,10 +132,10 @@ public class HttpServletTool {
 
     }
 
-    public static String postData(String url, List<NameValuePair> nameValuePairs) throws UnsupportedEncodingException, IOException {
+    public static String postData(String url, List<NameValuePair> nameValuePairs) throws IOException {
         return postData(url, nameValuePairs, currentTimeout);
     }
-    public static String postData(String url, List<NameValuePair> nameValuePairs, int timeout) throws UnsupportedEncodingException, IOException {
+    public static String postData(String url, List<NameValuePair> nameValuePairs, int timeout) throws IOException {
         String outputString = "";
         DefaultHttpClient httpclient = getDefaultHttpClient();
         HttpPost httppost = getHttpPost(url, timeout);
@@ -157,8 +157,8 @@ public class HttpServletTool {
         return postDataInGZIP(url, nameValuePairs, currentTimeout);
     }
 
-    public static String postDataInGZIP(String url, List<NameValuePair> nameValuePairs, int timeout) throws UnsupportedEncodingException, IOException {
-        String result = "";
+    public static String postDataInGZIP(String url, List<NameValuePair> nameValuePairs, int timeout) throws IOException {
+        StringBuilder result = new StringBuilder();
 
         DefaultHttpClient httpclient = getDefaultHttpClient();
         HttpPost httppost = getHttpPostGZIP(url, timeout);
@@ -176,12 +176,12 @@ public class HttpServletTool {
         }
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
-        String str = null;
+        String str;
         while ((str = br.readLine()) != null) {
-            result += str;
+            result.append(str);
         }
 
-        return result;
+        return result.toString();
 
     }
 

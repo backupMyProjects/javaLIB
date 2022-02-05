@@ -14,7 +14,7 @@ public class JsonTool {
     public static Object json2Object(String json) {
         if (null == json) {return null;}
         try {
-            return (new ObjectMapper()).readValue(json, new TypeReference<Object>() {});
+            return (new ObjectMapper()).readValue(json, new TypeReference<>() {});
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -46,7 +46,7 @@ public class JsonTool {
     public static Object jsonFile2Object(String jsonFile){
         if (null == jsonFile) {return null;}
         try {
-            return (new ObjectMapper()).readValue( new File(jsonFile), new TypeReference<Object>() {});
+            return (new ObjectMapper()).readValue( new File(jsonFile), new TypeReference<>() {});
         } catch (Exception e) {
             e.printStackTrace();
         }

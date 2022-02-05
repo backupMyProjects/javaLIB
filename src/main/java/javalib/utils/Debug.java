@@ -23,7 +23,7 @@ public class Debug {
         debug = input;
     }
     
-    public void setDebug(boolean input){debug = debug;}
+    public void setDebug(boolean input){debug = input;}
     public boolean getDebug(){return debug;}
     
     public void print(Object obj){
