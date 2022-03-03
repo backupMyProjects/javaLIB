@@ -6,7 +6,7 @@ import java.util.Date;
 
 /**
  *
- * @author leo
+ * @author Leo Chen
  */
 public final class Log {
 

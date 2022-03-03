@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  *
- * @author 1307033
+ * @author Leo Chen
  */
 public class PrintTool extends ToolBase{
     protected static String TAG = PrintTool.class.getName();

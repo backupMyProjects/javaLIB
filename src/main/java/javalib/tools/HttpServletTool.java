@@ -31,7 +31,7 @@ import org.apache.http.util.EntityUtils;
 
 /**
  *
- * @author leo
+ * @author Leo Chen
  */
 public class HttpServletTool {
     protected static String TAG = HttpServletTool.class.getName();

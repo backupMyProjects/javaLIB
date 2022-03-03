@@ -2,7 +2,7 @@ package javalib.tools;
 
 /**
  *
- * @author leo
+ * @author Leo Chen
  */
 public class TooletsObj {
     public String getHomePath(){

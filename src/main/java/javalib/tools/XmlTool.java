@@ -13,7 +13,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 /**
  *
- * @author leo Parsing XML to ALHM by parse("XML String") Reverting ALHM to XML
+ * @author Leo Chen Parsing XML to ALHM by parse("XML String") Reverting ALHM to XML
  * String by revert(ArrayList<hashMap<String,String>>)
  *
  */

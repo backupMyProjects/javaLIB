@@ -6,7 +6,7 @@ import static javalib.utils.Constants.*;
 
 /**
  *
- * @author leo
+ * @author Leo Chen
  */
 public class CommonDAOPrepared {
     

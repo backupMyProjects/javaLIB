@@ -8,7 +8,7 @@ import static javalib.utils.Constants.DBServer.*;
 
 /**
  *
- * @author leo
+ * @author Leo Chen
  */
 public class CommonDAO {
     Debug de = new Debug(true);

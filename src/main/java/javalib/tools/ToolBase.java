@@ -4,7 +4,7 @@ import javalib.utils.Debug;
 
 /**
  *
- * @author 1307033
+ * @author Leo Chen
  */
 public class ToolBase {
     protected Debug de = new Debug();
